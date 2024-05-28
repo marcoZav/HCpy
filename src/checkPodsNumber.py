@@ -48,6 +48,10 @@ baseUrls = [
   ,'https://snamprodgerjob.ondemand.sas.com'
   ]
 
+baseUrls = [
+   'https://snamtest.ondemand.sas.com'
+   ]
+
 
 
 
@@ -61,7 +65,7 @@ for baseUrl in baseUrls:
    print('-- Get Token:')
    logger.info('-- Get Token')
        
-   maxIter=2
+   maxIter=3
    iter=1
    endWhile=False
 
@@ -99,7 +103,7 @@ for baseUrl in baseUrls:
    else:
       print('TOKEN ' + datetime.now().strftime("%m/%d/%Y, %H:%M:%S") + ' ----------------------------')
       print('-- RUN Job Execution:')
-      pgmUrl = 'https://raw.githubusercontent.com/marcoZav/opsMng/main/getComputePods.sas'
+      pgmUrl = 'https://raw.githubusercontent.com/marcoZav/opsMng/main/getComputePodsNumber.sas'
 
       response=sasapi.runJobExecution(baseUrl,token,'%2FSNM%2Futility_jobs%2Fexec_pgm_from_url',"pgm_url=" + pgmUrl)
       print(response.text)
