@@ -8,6 +8,8 @@ from datetime import date, timedelta
 import traceback 
 import sys
 
+import logging
+
 
 def getToken(baseUrl):
    url = baseUrl + "/SASLogon/oauth/token"
@@ -153,4 +155,38 @@ def getConfigurationDefinition(baseUrl,token,definitionItem):
    items=rj['items']
    #print(items)
    return items
+
+class Measure:
+   def __init__(self, environment, timestamp, measureName, measureValue, desc):
+    self.environment = environment
+    self.timestamp = timestamp
+    self.measureName=measureName
+    self.measureValue=measureValue
+    self.desc=desc
+
+
+class Stats:
+   sep=';'
+   def __init__(self,logger):
+       self.logger=logger
+      
+   def handleMeasure(self,measure):
+      defaultMsg=measure.environment + self.sep + measure.measureName + '=' + measure.measureValue + self.sep + measure.desc
+      match measure.measureName:
+         case 'NUM_COMPUTE_PODS':
+            if int(measure.measureValue) <= 10:
+               self.logger.info(defaultMsg)
+            elif int(measure.measureValue) > 10 and int(measure.measureValue) < 100:
+               self.logger.warning(defaultMsg)
+            elif int(measure.measureValue) >= 100:
+               self.logger.error(defaultMsg)
+         case "GET_TOKEN_ERROR":
+            self.logger.error(defaultMsg)
+         case "GET_TOKEN_ELAPSED":
+            if float(measure.measureValue) > 600:
+               self.logger.warning(defaultMsg)
+            else:
+               self.logger.info(defaultMsg)
+         case _:
+            self.logger.info(defaultMsg)
 
