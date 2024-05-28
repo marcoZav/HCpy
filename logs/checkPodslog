@@ -1,0 +1,46 @@
+2024-05-28 15:33:54 INFO     START 05/28/2024, 15:33:54 ----------------------------------------------------------------------------------------------
+2024-05-28 15:33:54 INFO     https://snamprodgerjob.ondemand.sas.com
+2024-05-28 15:33:54 INFO     -- Get Token
+2024-05-28 15:34:06 ERROR    httpStatusCode: 403
+2024-05-28 15:34:06 ERROR    Description: Ko
+2024-05-28 15:34:06 CRITICAL **** errore durante la generazione del token: EXITING ****
+2024-05-28 15:39:17 INFO     https://snamtest.ondemand.sas.com
+2024-05-28 15:39:17 INFO     -- Get Token
+2024-05-28 15:39:29 ERROR    httpStatusCode: 403
+2024-05-28 15:39:29 ERROR    Description: Ko
+2024-05-28 15:39:29 CRITICAL **** errore durante la generazione del token: EXITING ****
+2024-05-28 15:39:30 INFO     https://snamprodmp.ondemand.sas.com
+2024-05-28 15:39:30 INFO     -- Get Token
+2024-05-28 15:39:41 ERROR    httpStatusCode: 403
+2024-05-28 15:39:41 ERROR    Description: Ko
+2024-05-28 15:39:41 CRITICAL **** errore durante la generazione del token: EXITING ****
+2024-05-28 15:39:41 INFO     https://snamprodukjob.ondemand.sas.com
+2024-05-28 15:39:41 INFO     -- Get Token
+2024-05-28 15:39:52 ERROR    httpStatusCode: 403
+2024-05-28 15:39:52 ERROR    Description: Ko
+2024-05-28 15:39:52 CRITICAL **** errore durante la generazione del token: EXITING ****
+2024-05-28 15:39:53 INFO     https://snamprodgerjob.ondemand.sas.com
+2024-05-28 15:39:53 INFO     -- Get Token
+2024-05-28 15:40:04 ERROR    httpStatusCode: 403
+2024-05-28 15:40:04 ERROR    Description: Ko
+2024-05-28 15:40:04 CRITICAL **** errore durante la generazione del token: EXITING ****
+2024-05-28 15:41:08 INFO     https://snamtest.ondemand.sas.com
+2024-05-28 15:41:08 INFO     -- Get Token
+2024-05-28 15:41:20 ERROR    httpStatusCode: 403
+2024-05-28 15:41:20 ERROR    Description: Ko
+2024-05-28 15:41:20 CRITICAL **** errore durante la generazione del token: SKIP parte successiva ****
+2024-05-28 15:41:20 INFO     https://snamprodmp.ondemand.sas.com
+2024-05-28 15:41:20 INFO     -- Get Token
+2024-05-28 15:41:31 ERROR    httpStatusCode: 403
+2024-05-28 15:41:31 ERROR    Description: Ko
+2024-05-28 15:41:31 CRITICAL **** errore durante la generazione del token: SKIP parte successiva ****
+2024-05-28 15:41:31 INFO     https://snamprodukjob.ondemand.sas.com
+2024-05-28 15:41:31 INFO     -- Get Token
+2024-05-28 15:41:42 ERROR    httpStatusCode: 403
+2024-05-28 15:41:42 ERROR    Description: Ko
+2024-05-28 15:41:42 CRITICAL **** errore durante la generazione del token: SKIP parte successiva ****
+2024-05-28 15:41:42 INFO     https://snamprodgerjob.ondemand.sas.com
+2024-05-28 15:41:42 INFO     -- Get Token
+2024-05-28 15:41:53 ERROR    httpStatusCode: 403
+2024-05-28 15:41:53 ERROR    Description: Ko
+2024-05-28 15:41:53 CRITICAL **** errore durante la generazione del token: SKIP parte successiva ****
