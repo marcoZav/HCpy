@@ -156,6 +156,90 @@ def getConfigurationDefinition(baseUrl,token,definitionItem):
    #print(items)
    return items
 
+
+
+
+def buildJobsDataTable(items):
+   
+   jobsdata=[]
+
+   for item in items:
+    #print('================================================================================')
+    #print(item)
+    jobId=item['id']
+    jobcreationTimeStamp=item['creationTimeStamp']
+    jobmodifiedTimeStamp=item['modifiedTimeStamp']
+    jobCreatedby=item['createdBy']
+    jobmodifiedBy=item['modifiedBy']
+    jobState=item['state']
+    jobendTimeStamp=item['endTimeStamp'] if ('endTimeStamp' in item) else 'Missing'
+    jobheartbeatTimeStamp=item['heartbeatTimeStamp'] if ('heartbeatTimeStamp' in item) else 'Missing'
+    jobexpirationTimeStamp=item['expirationTimeStamp'] if ('expirationTimeStamp' in item) else 'Missing'
+    jobsubmittedByApplication=item['submittedByApplication']
+    jobheartbeatInterval=item['heartbeatInterval'] if ('heartbeatInterval' in item) else 'Missing'
+    jobelapsedTime=item['elapsedTime']
+
+    jobRequest=item['jobRequest']
+    #print(jobRequest)
+    jobName=jobRequest['name']
+    jobexpiresAfter=jobRequest['expiresAfter'] if ('expiresAfter' in item) else 'Missing'
+
+    """
+    print(jobId)
+    print(jobState)
+    print(jobcreationTimeStamp)
+    
+    print(jobmodifiedTimeStamp)
+    print(jobCreatedby)
+    print(jobendTimeStamp)
+    print(jobsubmittedByApplication)
+    print(jobexpiresAfter)
+    """
+
+    giorno =jobcreationTimeStamp[0:10];
+    oraZ   =jobcreationTimeStamp[11:13];
+    minuto =int(jobcreationTimeStamp[14:16]);
+    
+    #print(jobsubmittedByApplication)
+    if (
+       # job execution api 
+       #(  jobsubmittedByApplication == 'SASJobExecution' ) 
+       # job schedulati
+       #| 
+       (  jobsubmittedByApplication == 'jobExecution' ) 
+       & ( jobName.find('jmon') == -1 )
+       #& ( jobName.find('jmon') >= 0 )
+       # passo tutto
+       #| (True )
+       ):
+        jobsdata.append(
+          {
+              'jobId': jobId,
+              'jobName': jobName,
+
+              'giorno': giorno,
+              'oraZ': oraZ,
+              'minuto': minuto,
+
+              'jobState': jobState,
+              'jobCreatedby': jobCreatedby,
+              'jobendTimeStamp': jobendTimeStamp,
+              'jobsubmittedByApplication': jobsubmittedByApplication,
+              'jobexpiresAfter': jobexpiresAfter,
+              'jobelapsedTime': jobelapsedTime,
+              #'jobheartbeatTimeStamp': jobheartbeatTimeStamp,
+              #'jobheartbeatInterval': jobheartbeatInterval,
+              'jobcreationTimeStamp':  jobcreationTimeStamp
+          })
+        
+   return jobsdata
+
+
+
+
+
+
+
 class Measure:
    def __init__(self, environment, timestamp, measureName, measureValue, desc):
     self.environment = environment
@@ -173,6 +257,13 @@ class Stats:
    def handleMeasure(self,measure):
       defaultMsg=measure.environment + self.sep + measure.measureName + '=' + measure.measureValue + self.sep + measure.desc
       match measure.measureName:
+         case 'SNM_PCT_USED':
+            if int(measure.measureValue) <= 10:
+               self.logger.info(defaultMsg)
+            elif int(measure.measureValue) > 10 and int(measure.measureValue) < 50:
+               self.logger.warning(defaultMsg)
+            elif int(measure.measureValue) >= 50:
+               self.logger.error(defaultMsg)      
          case 'NUM_COMPUTE_PODS':
             if int(measure.measureValue) <= 10:
                self.logger.info(defaultMsg)

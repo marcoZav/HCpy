@@ -25,6 +25,9 @@ import pandas
 
 from datetime import datetime
 from datetime import date, timedelta
+
+import datetime as dt
+
 from time import sleep
 import traceback 
 import sys
@@ -155,6 +158,8 @@ maxIter=2
 iter=1
 endWhile=False
 
+nDaysPastJobs=0
+batchJobsNumber2test=6
 
 while ( ( iter <= maxIter ) & ( endWhile == False ) ):
    # terzo parametro, numero di giorni indietro
@@ -171,75 +176,8 @@ while ( ( iter <= maxIter ) & ( endWhile == False ) ):
 if ( len(items) == 0 ):
    print('ELENCO JOBS RESTITUITO HA ZERO ELEMENTI')
 else:
-   jobsdata=[]
-   for item in items:
-    #print('================================================================================')
-    #print(item)
-    jobId=item['id']
-    jobcreationTimeStamp=item['creationTimeStamp']
-    jobmodifiedTimeStamp=item['modifiedTimeStamp']
-    jobCreatedby=item['createdBy']
-    jobmodifiedBy=item['modifiedBy']
-    jobState=item['state']
-    jobendTimeStamp=item['endTimeStamp'] if ('endTimeStamp' in item) else 'Missing'
-    jobheartbeatTimeStamp=item['heartbeatTimeStamp'] if ('heartbeatTimeStamp' in item) else 'Missing'
-    jobexpirationTimeStamp=item['expirationTimeStamp'] if ('expirationTimeStamp' in item) else 'Missing'
-    jobsubmittedByApplication=item['submittedByApplication']
-    jobheartbeatInterval=item['heartbeatInterval'] if ('heartbeatInterval' in item) else 'Missing'
-    jobelapsedTime=item['elapsedTime']
+   jobsdata=sasapi.buildJobsDataTable(items)     
 
-    jobRequest=item['jobRequest']
-    jobName=jobRequest['name']
-    jobexpiresAfter=jobRequest['expiresAfter'] if ('expiresAfter' in item) else 'Missing'
-
-    """
-    print(jobId)
-    print(jobState)
-    print(jobcreationTimeStamp)
-    
-    print(jobmodifiedTimeStamp)
-    print(jobCreatedby)
-    print(jobendTimeStamp)
-    print(jobsubmittedByApplication)
-    print(jobexpiresAfter)
-    """
-
-    giorno =jobcreationTimeStamp[0:10];
-    oraZ   =jobcreationTimeStamp[11:13];
-    minuto =int(jobcreationTimeStamp[14:16]);
-    
-    #print(jobsubmittedByApplication)
-    if (
-       # job execution api 
-       #(  jobsubmittedByApplication == 'SASJobExecution' ) 
-       # job schedulati
-       #| 
-       (  jobsubmittedByApplication == 'jobExecution' ) 
-       & ( jobName.find('jmon') == -1 )
-       #& ( jobName.find('jmon') >= 0 )
-       # passo tutto
-       #| (True )
-       ):
-        jobsdata.append(
-          {
-              'jobId': jobId,
-              'jobName': jobName,
-
-              'giorno': giorno,
-              'oraZ': oraZ,
-              'minuto': minuto,
-
-              'jobState': jobState,
-              'jobCreatedby': jobCreatedby,
-              'jobendTimeStamp': jobendTimeStamp,
-              'jobsubmittedByApplication': jobsubmittedByApplication,
-              'jobexpiresAfter': jobexpiresAfter,
-              'jobelapsedTime': jobelapsedTime,
-              #'jobheartbeatTimeStamp': jobheartbeatTimeStamp,
-              #'jobheartbeatInterval': jobheartbeatInterval,
-              'jobcreationTimeStamp':  jobcreationTimeStamp
-          })
-     
    #check se ci sono job del tipo filtrato sopra
    n=len(jobsdata) 
    if n==0:
@@ -251,7 +189,21 @@ else:
       pandas.set_option('display.max_colwidth', None)
       print('\n')
       dfJobs.sort_values(by=['giorno','oraZ','jobName'], ascending=True)
-      print(dfJobs)
+      #print(dfJobs)
+
+
+      # UTC/GMT time
+      dt_utcnow = datetime.now(dt.UTC)
+      print('UTC time:',dt_utcnow)
+      print(dt_utcnow.hour, dt_utcnow.minute)
+
+
+      dfJobsCurrentHour=dfJobs.loc[
+            ( dfJobs['oraZ'] == str(dt_utcnow.hour) ) 
+         ]
+      print('Dettaglio Jobs di questa ORA:')
+      print(dfJobsCurrentHour)
+
       dfJobsSummary=dfJobs.groupby(['giorno','oraZ'], as_index = False).agg(
          {
          'minuto': ['min', 'max'], 
@@ -260,9 +212,7 @@ else:
          'jobState': ' '.join
          })
       print('\n')
-      print('dfJobsSummary')
-      print(dfJobsSummary)
-
+  
       """
       for col in dfJobsSummary.columns:
        print(col)
@@ -270,14 +220,21 @@ else:
 
 
 
-      dfJobsAlert=dfJobsSummary.loc[
-         ( dfJobsSummary[('jobId', 'count')] != batchJobsNumber2test )
-         |  ( dfJobsSummary[('minuto', 'max')] > numberOfMinutesDelay4error) 
-         |  ( dfJobsSummary[('jobState', 'join')].str.contains('failed') ) 
+      dfJobsSummaryCurrentHour=dfJobsSummary.loc[
+            ( dfJobsSummary['oraZ'] == str(dt_utcnow.hour) ) 
+         ]
+      print('SUmmary Jobs di questa ORA:')
+      print(dfJobsSummaryCurrentHour)
+
+
+      dfJobsAlert=dfJobsSummaryCurrentHour.loc[
+            ( dfJobsSummaryCurrentHour[('jobId', 'count')] < batchJobsNumber2test )
+         |  ( dfJobsSummaryCurrentHour[('minuto', 'max')] > numberOfMinutesDelay4error) 
+         |  ( dfJobsSummaryCurrentHour[('jobState', 'join')].str.contains('failed') ) 
          ]
       print('\n')
       print('********************************************************************')
-      #print(dfJobsAlert)
+      print(dfJobsAlert)
       if len(dfJobsAlert.index) == 0:
          print ('PASS')
       else:
