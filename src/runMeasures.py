@@ -10,9 +10,13 @@ dname = os.path.dirname(currentPyFileAbspath)
 os.chdir(dname)
 #print(dname)
 sys.path.insert(0, dname)
-sys.path.insert(0, dname + '\\..\\modules')
 
-logfolder=dname + '\\..\\logs'
+# uso / al posto di \\ per poter girare anche su linux
+#sys.path.insert(0, dname + '\\..\\modules')
+sys.path.insert(0, dname + '/../modules')
+
+#logfolder=dname + '\\..\\logs'
+logfolder=dname + '/../logs'
 print(logfolder)
 
 
@@ -38,7 +42,9 @@ import sys
 import logging
 logger = logging.getLogger(__name__)
 logging.basicConfig(
-   filename=logfolder+'\\'+'stats.log'
+   #per funzionare anche su linux
+   #filename=logfolder+'\\'+'stats.log'
+   filename=logfolder+'/'+'stats.log'
    , encoding='utf-8'
    , format='%(asctime)s %(levelname)-8s %(message)s'
    , datefmt='%Y-%m-%d %H:%M:%S'

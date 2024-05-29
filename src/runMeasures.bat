@@ -1,0 +1,1 @@
+c:/myPrograms/python-3.11.9-embed-amd64/python.exe c:/myProjects/HCpy/src/runMeasures.py
