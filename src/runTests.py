@@ -49,16 +49,19 @@ baseUrl = 'https://snamprodgerjob.ondemand.sas.com'
 
 
 
-batchJobsNumber2test=1
-numberOfMinutesDelay4error=3
-nDaysPastJobs=1
-baseUrl = 'https://snamtest.ondemand.sas.com'
 
 
 batchJobsNumber2test=1
 nDaysPastJobs=3
 numberOfMinutesDelay4error=43
 baseUrl = 'https://snamprodukjob.ondemand.sas.com'
+
+
+batchJobsNumber2test=1
+numberOfMinutesDelay4error=3
+nDaysPastJobs=1
+baseUrl = 'https://snamtest.ondemand.sas.com'
+
 
 # -----------------------------------------------------------------------------------------------------------------
 
@@ -127,6 +130,13 @@ print(items)
 print('\n')
 print('-- Get Identities Conf:')
 items=sasapi.getConfigurationDefinition(baseUrl,token,'sas.identities')
+#items=getIdentitiesConf(baseUrl,token)
+print(items)
+
+
+print('\n')
+print('-- Get sas.logon.jwt Conf:')
+items=sasapi.getConfigurationDefinition(baseUrl,token,'sas.logon.jwt')
 #items=getIdentitiesConf(baseUrl,token)
 print(items)
 
