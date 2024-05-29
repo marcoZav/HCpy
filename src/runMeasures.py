@@ -154,6 +154,7 @@ for baseUrl in baseUrls:
       if (   baseUrl == 'https://snamprodgerjob.ondemand.sas.com' 
             or baseUrl == 'https://snamprodukjob.ondemand.sas.com'
             or baseUrl == 'https://snamprodmp.ondemand.sas.com'
+            or baseUrl == 'https://snamtest.ondemand.sas.com'
            ):
          
          if baseUrl == 'https://snamprodgerjob.ondemand.sas.com':
@@ -165,6 +166,9 @@ for baseUrl in baseUrls:
          if baseUrl == 'https://snamprodmp.ondemand.sas.com':
             numberOfMinutesDelay4error=0
             batchJobsNumber2test=4
+         if baseUrl == 'https://snamtest.ondemand.sas.com':
+            numberOfMinutesDelay4error=0
+            batchJobsNumber2test=2
 
          while ( ( iter <= maxIter ) & ( endWhile == False ) ):
             # terzo parametro, numero di giorni indietro
