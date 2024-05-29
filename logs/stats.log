@@ -1,95 +1,30 @@
-2024-05-28 18:48:25 INFO     https://snamtest.ondemand.sas.com;GET_TOKEN_ELAPSED=364.599;
-2024-05-28 18:48:39 WARNING  https://snamtest.ondemand.sas.com;NUM_COMPUTE_PODS=15;
-2024-05-28 18:48:41 INFO     https://snamtest.ondemand.sas.com;SNM_PCT_USED=1;
-2024-05-28 18:48:42 INFO     https://snamprodmp.ondemand.sas.com;GET_TOKEN_ELAPSED=335.443;
-2024-05-28 18:48:56 INFO     https://snamprodmp.ondemand.sas.com;NUM_COMPUTE_PODS=2;
-2024-05-28 18:48:58 WARNING  https://snamprodmp.ondemand.sas.com;SNM_PCT_USED=24;
-2024-05-28 18:48:59 INFO     https://snamprodukjob.ondemand.sas.com;GET_TOKEN_ELAPSED=317.241;
-2024-05-28 18:49:13 ERROR    https://snamprodukjob.ondemand.sas.com;NUM_COMPUTE_PODS=120;
-2024-05-28 18:49:15 INFO     https://snamprodukjob.ondemand.sas.com;SNM_PCT_USED=1;
-2024-05-28 18:49:17 INFO     https://snamprodgerjob.ondemand.sas.com;GET_TOKEN_ELAPSED=405.516;
-2024-05-28 18:49:31 ERROR    https://snamprodgerjob.ondemand.sas.com;NUM_COMPUTE_PODS=113;
-2024-05-28 18:49:33 INFO     https://snamprodgerjob.ondemand.sas.com;SNM_PCT_USED=1;
-2024-05-28 20:06:07 WARNING  https://snamtest.ondemand.sas.com;GET_TOKEN_ELAPSED=622.091;
-2024-05-28 20:06:20 WARNING  https://snamtest.ondemand.sas.com;NUM_COMPUTE_PODS=17;
-2024-05-28 20:06:23 INFO     https://snamtest.ondemand.sas.com;SNM_PCT_USED=1;
-2024-05-28 20:08:16 WARNING  https://snamtest.ondemand.sas.com;GET_TOKEN_ELAPSED=903.181;
-2024-05-28 20:08:30 WARNING  https://snamtest.ondemand.sas.com;NUM_COMPUTE_PODS=17;
-2024-05-28 20:08:32 INFO     https://snamtest.ondemand.sas.com;SNM_PCT_USED=1;
-2024-05-28 20:08:34 INFO     https://snamprodmp.ondemand.sas.com;GET_TOKEN_ELAPSED=411.179;
-2024-05-28 20:08:47 INFO     https://snamprodmp.ondemand.sas.com;NUM_COMPUTE_PODS=5;
-2024-05-28 20:08:49 WARNING  https://snamprodmp.ondemand.sas.com;SNM_PCT_USED=24;
-2024-05-28 20:09:47 INFO     https://snamtest.ondemand.sas.com;GET_TOKEN_ELAPSED=468.122;
-2024-05-28 20:10:01 WARNING  https://snamtest.ondemand.sas.com;NUM_COMPUTE_PODS=17;
-2024-05-28 20:10:03 INFO     https://snamtest.ondemand.sas.com;SNM_PCT_USED=1;
-2024-05-28 20:10:05 INFO     https://snamprodmp.ondemand.sas.com;GET_TOKEN_ELAPSED=463.613;
-2024-05-28 20:10:18 INFO     https://snamprodmp.ondemand.sas.com;NUM_COMPUTE_PODS=5;
-2024-05-28 20:10:20 WARNING  https://snamprodmp.ondemand.sas.com;SNM_PCT_USED=24;
-2024-05-28 20:10:27 WARNING  https://snamprodukjob.ondemand.sas.com;GET_TOKEN_ELAPSED=706.327;
-2024-05-28 20:10:41 ERROR    https://snamprodukjob.ondemand.sas.com;NUM_COMPUTE_PODS=120;
-2024-05-28 20:10:43 INFO     https://snamprodukjob.ondemand.sas.com;SNM_PCT_USED=1;
-2024-05-28 20:10:47 INFO     https://snamprodgerjob.ondemand.sas.com;GET_TOKEN_ELAPSED=414.582;
-2024-05-28 20:11:01 ERROR    https://snamprodgerjob.ondemand.sas.com;NUM_COMPUTE_PODS=113;
-2024-05-28 20:11:03 INFO     https://snamprodgerjob.ondemand.sas.com;SNM_PCT_USED=1;
-2024-05-28 20:18:59 WARNING  https://snamtest.ondemand.sas.com;GET_TOKEN_ELAPSED=707.771;
-2024-05-28 20:19:12 WARNING  https://snamtest.ondemand.sas.com;NUM_COMPUTE_PODS=17;
-2024-05-28 20:19:15 INFO     https://snamtest.ondemand.sas.com;SNM_PCT_USED=1;
-2024-05-28 20:19:17 INFO     https://snamprodmp.ondemand.sas.com;GET_TOKEN_ELAPSED=411.56;
-2024-05-28 20:19:30 INFO     https://snamprodmp.ondemand.sas.com;NUM_COMPUTE_PODS=3;
-2024-05-28 20:19:32 WARNING  https://snamprodmp.ondemand.sas.com;SNM_PCT_USED=24;
-2024-05-28 20:19:37 INFO     https://snamprodmp.ondemand.sas.com;CHECK_JOBS_HOURLY=18;OK
-2024-05-28 20:19:39 INFO     https://snamprodukjob.ondemand.sas.com;GET_TOKEN_ELAPSED=367.86;
-2024-05-28 20:19:53 ERROR    https://snamprodukjob.ondemand.sas.com;NUM_COMPUTE_PODS=120;
-2024-05-28 20:19:55 INFO     https://snamprodukjob.ondemand.sas.com;SNM_PCT_USED=1;
-2024-05-28 20:21:35 INFO     https://snamtest.ondemand.sas.com;GET_TOKEN_ELAPSED=366.989;
-2024-05-28 20:21:49 WARNING  https://snamtest.ondemand.sas.com;NUM_COMPUTE_PODS=17;
-2024-05-28 20:21:51 INFO     https://snamtest.ondemand.sas.com;SNM_PCT_USED=1;
-2024-05-28 20:21:52 INFO     https://snamprodmp.ondemand.sas.com;GET_TOKEN_ELAPSED=294.302;
-2024-05-28 20:22:06 INFO     https://snamprodmp.ondemand.sas.com;NUM_COMPUTE_PODS=3;
-2024-05-28 20:22:08 WARNING  https://snamprodmp.ondemand.sas.com;SNM_PCT_USED=24;
-2024-05-28 20:22:13 INFO     https://snamprodmp.ondemand.sas.com;CHECK_JOBS_HOURLY=18;OK
-2024-05-28 20:22:14 INFO     https://snamprodukjob.ondemand.sas.com;GET_TOKEN_ELAPSED=274.836;
-2024-05-28 20:22:28 ERROR    https://snamprodukjob.ondemand.sas.com;NUM_COMPUTE_PODS=120;
-2024-05-28 20:22:30 INFO     https://snamprodukjob.ondemand.sas.com;SNM_PCT_USED=1;
-2024-05-28 20:22:32 INFO     https://snamprodukjob.ondemand.sas.com;GET_JOBS_NOTFOUND=0;Nessun Job presente del tipo selezionato in jobsubmittedByApplication
-2024-05-28 20:22:34 INFO     https://snamprodgerjob.ondemand.sas.com;GET_TOKEN_ELAPSED=450.586;
-2024-05-28 20:22:47 ERROR    https://snamprodgerjob.ondemand.sas.com;NUM_COMPUTE_PODS=113;
-2024-05-28 20:22:50 INFO     https://snamprodgerjob.ondemand.sas.com;SNM_PCT_USED=1;
-2024-05-28 20:23:00 INFO     https://snamprodgerjob.ondemand.sas.com;CHECK_JOBS_HOURLY=<bound method DataFrame.count of         giorno oraZ minuto     jobId                        jobName                                           jobState
-                       min max count                           join                                               join
-0   2024-05-28   00      0   0     5  jd_02 jd_04 jd_05 jd_03 jd_01  completed completed completed completed completed
-1   2024-05-28   01      0   0     5  jd_01 jd_05 jd_04 jd_03 jd_02  completed completed completed completed completed
-2   2024-05-28   02      0   0     5  jd_03 jd_01 jd_05 jd_02 jd_04  completed completed completed completed completed
-3   2024-05-28   03      0   0     5  jd_04 jd_03 jd_01 jd_05 jd_02  completed completed completed completed completed
-4   2024-05-28   04      0   0     5  jd_04 jd_01 jd_03 jd_02 jd_05  completed completed completed completed completed
-5   2024-05-28   05      0   0     5  jd_01 jd_02 jd_04 jd_03 jd_05  completed completed completed completed completed
-6   2024-05-28   06      0   0     5  jd_01 jd_03 jd_04 jd_02 jd_05  completed completed completed completed completed
-7   2024-05-28   07      0   0     5  jd_04 jd_02 jd_03 jd_01 jd_05  completed completed completed completed completed
-8   2024-05-28   08      0   0     5  jd_03 jd_05 jd_04 jd_02 jd_01  completed completed completed completed completed
-9   2024-05-28   09      0   0     5  jd_01 jd_03 jd_02 jd_04 jd_05  completed completed completed completed completed
-10  2024-05-28   10      0   0     5  jd_02 jd_04 jd_05 jd_01 jd_03  completed completed completed completed completed
-11  2024-05-28   11      0   0     5  jd_01 jd_03 jd_04 jd_05 jd_02  completed completed completed completed completed
-12  2024-05-28   12      0   0     5  jd_01 jd_04 jd_05 jd_02 jd_03  completed completed completed completed completed
-13  2024-05-28   13      0   0     5  jd_04 jd_01 jd_05 jd_03 jd_02  completed completed completed completed completed
-14  2024-05-28   14      0   0     5  jd_02 jd_01 jd_05 jd_03 jd_04  completed completed completed completed completed
-15  2024-05-28   15      0   0     5  jd_04 jd_05 jd_03 jd_01 jd_02  completed completed completed completed completed
-16  2024-05-28   16      0   0     5  jd_01 jd_02 jd_05 jd_03 jd_04  completed completed completed completed completed
-17  2024-05-28   17      0   0     5  jd_05 jd_04 jd_03 jd_02 jd_01  completed completed completed completed completed
-18  2024-05-28   18      0   0     5  jd_05 jd_04 jd_01 jd_02 jd_03  completed completed completed completed completed>;Jobs partiti MINORE del previsto
-2024-05-28 20:27:13 INFO     https://snamtest.ondemand.sas.com;GET_TOKEN_ELAPSED=484.14;
-2024-05-28 20:27:27 WARNING  https://snamtest.ondemand.sas.com;NUM_COMPUTE_PODS=17;
-2024-05-28 20:27:29 INFO     https://snamtest.ondemand.sas.com;SNM_PCT_USED=1;
-2024-05-28 20:27:31 INFO     https://snamprodmp.ondemand.sas.com;GET_TOKEN_ELAPSED=325.728;
-2024-05-28 20:27:44 INFO     https://snamprodmp.ondemand.sas.com;NUM_COMPUTE_PODS=3;
-2024-05-28 20:27:46 WARNING  https://snamprodmp.ondemand.sas.com;SNM_PCT_USED=24;
-2024-05-28 20:27:51 INFO     https://snamprodmp.ondemand.sas.com;CHECK_JOBS_HOURLY=18;OK
-2024-05-28 20:27:53 INFO     https://snamprodukjob.ondemand.sas.com;GET_TOKEN_ELAPSED=454.311;
-2024-05-28 20:28:07 ERROR    https://snamprodukjob.ondemand.sas.com;NUM_COMPUTE_PODS=120;
-2024-05-28 20:28:09 INFO     https://snamprodukjob.ondemand.sas.com;SNM_PCT_USED=1;
-2024-05-28 20:28:11 INFO     https://snamprodukjob.ondemand.sas.com;GET_JOBS_NOTFOUND=0;Nessun Job presente del tipo selezionato in jobsubmittedByApplication
-2024-05-28 20:28:13 INFO     https://snamprodgerjob.ondemand.sas.com;GET_TOKEN_ELAPSED=393.711;
-2024-05-28 20:28:26 ERROR    https://snamprodgerjob.ondemand.sas.com;NUM_COMPUTE_PODS=113;
-2024-05-28 20:28:29 INFO     https://snamprodgerjob.ondemand.sas.com;SNM_PCT_USED=1;
-2024-05-28 20:28:34 INFO     https://snamprodgerjob.ondemand.sas.com;CHECK_JOBS_HOURLY=<bound method DataFrame.count of         giorno oraZ minuto     jobId                        jobName                                           jobState
-                       min max count                           join                                               join
-18  2024-05-28   18      0   0     5  jd_05 jd_04 jd_01 jd_02 jd_03  completed completed completed completed completed>;Jobs partiti MINORE del previsto
+2024-05-29 11:59:54 WARNING  https://snamtest.ondemand.sas.com;GET_TOKEN_ELAPSED=718.361;
+2024-05-29 12:00:08 WARNING  https://snamtest.ondemand.sas.com;NUM_COMPUTE_PODS=19;
+2024-05-29 12:00:11 INFO     https://snamtest.ondemand.sas.com;SNM_PCT_USED=1;
+2024-05-29 12:00:13 INFO     https://snamprodmp.ondemand.sas.com;GET_TOKEN_ELAPSED=565.444;
+2024-05-29 12:00:33 INFO     https://snamprodmp.ondemand.sas.com;NUM_COMPUTE_PODS=8;
+2024-05-29 12:00:36 WARNING  https://snamprodmp.ondemand.sas.com;SNM_PCT_USED=24;
+2024-05-29 12:00:40 INFO     https://snamprodmp.ondemand.sas.com;CHECK_JOBS_HOURLY=10;OK
+2024-05-29 12:00:42 INFO     https://snamprodukjob.ondemand.sas.com;GET_TOKEN_ELAPSED=525.71;
+2024-05-29 12:00:56 ERROR    https://snamprodukjob.ondemand.sas.com;NUM_COMPUTE_PODS=125;
+2024-05-29 12:00:58 INFO     https://snamprodukjob.ondemand.sas.com;SNM_PCT_USED=1;
+2024-05-29 12:01:00 INFO     https://snamprodukjob.ondemand.sas.com;GET_JOBS_NOTFOUND=0;Nessun Job presente del tipo selezionato in jobsubmittedByApplication
+2024-05-29 12:01:02 INFO     https://snamprodgerjob.ondemand.sas.com;GET_TOKEN_ELAPSED=446.728;
+2024-05-29 12:01:15 ERROR    https://snamprodgerjob.ondemand.sas.com;NUM_COMPUTE_PODS=121;
+2024-05-29 12:01:18 INFO     https://snamprodgerjob.ondemand.sas.com;SNM_PCT_USED=1;
+2024-05-29 12:01:23 INFO     https://snamprodgerjob.ondemand.sas.com;CHECK_JOBS_HOURLY=10;OK
+2024-05-29 12:03:43 WARNING  https://snamtest.ondemand.sas.com;GET_TOKEN_ELAPSED=857.423;
+2024-05-29 12:03:57 WARNING  https://snamtest.ondemand.sas.com;NUM_COMPUTE_PODS=19;
+2024-05-29 12:04:00 INFO     https://snamtest.ondemand.sas.com;SNM_PCT_USED=1;
+2024-05-29 12:04:01 INFO     https://snamprodmp.ondemand.sas.com;GET_TOKEN_ELAPSED=395.648;
+2024-05-29 12:04:15 INFO     https://snamprodmp.ondemand.sas.com;NUM_COMPUTE_PODS=8;
+2024-05-29 12:04:17 WARNING  https://snamprodmp.ondemand.sas.com;SNM_PCT_USED=24;
+2024-05-29 12:04:22 INFO     https://snamprodmp.ondemand.sas.com;CHECK_JOBS_HOURLY=10;OK
+2024-05-29 12:04:24 INFO     https://snamprodukjob.ondemand.sas.com;GET_TOKEN_ELAPSED=598.511;
+2024-05-29 12:04:37 ERROR    https://snamprodukjob.ondemand.sas.com;NUM_COMPUTE_PODS=125;
+2024-05-29 12:04:40 INFO     https://snamprodukjob.ondemand.sas.com;SNM_PCT_USED=1;
+2024-05-29 12:04:42 INFO     https://snamprodukjob.ondemand.sas.com;GET_JOBS_NOTFOUND=0;Nessun Job presente del tipo selezionato in jobsubmittedByApplication
+2024-05-29 12:04:44 INFO     https://snamprodgerjob.ondemand.sas.com;GET_TOKEN_ELAPSED=361.524;
+2024-05-29 12:04:58 ERROR    https://snamprodgerjob.ondemand.sas.com;NUM_COMPUTE_PODS=121;
+2024-05-29 12:05:00 INFO     https://snamprodgerjob.ondemand.sas.com;SNM_PCT_USED=1;
+2024-05-29 12:05:06 INFO     https://snamprodgerjob.ondemand.sas.com;CHECK_JOBS_HOURLY=10;OK

@@ -56,7 +56,8 @@ baseUrls = [
   ,'https://snamprodgerjob.ondemand.sas.com'
   ]
 
-
+# debug
+#baseUrls = ['https://snamprodgerjob.ondemand.sas.com' ]
 
 # -----------------------------------------------------------------------------------------------------------------
 
@@ -92,7 +93,7 @@ for baseUrl in baseUrls:
             description=traceBackText
             print('Traceback',description)
          iter=iter+1
-         stats.handleMeasure(sasapi.Measure(baseUrl,datetime.now(),'GET_TOKEN_RETRY',httpStatusCode,description))
+         stats.handleMeasure(sasapi.Measure(baseUrl,datetime.now(),'GET_TOKEN_RETRY',str(httpStatusCode),description))
          sleep(5)
       else:
          endWhile=True
@@ -103,7 +104,7 @@ for baseUrl in baseUrls:
       if (description=='GENERIC_ERROR'):
          description=traceBackText
 
-      stats.handleMeasure(sasapi.Measure(baseUrl,datetime.now(),'GET_TOKEN_ERROR',httpStatusCode,description))
+      stats.handleMeasure(sasapi.Measure(baseUrl,datetime.now(),'GET_TOKEN_ERROR',str(httpStatusCode),description))
       #sys.exit(1)
    else:
       stats.handleMeasure(sasapi.Measure(baseUrl,datetime.now(),'GET_TOKEN_ELAPSED',str(elapsed),''))
@@ -132,8 +133,7 @@ for baseUrl in baseUrls:
       snmPctUsed=rj['snm_pctUsed']
       print(snmPctUsed)
 
-      m=sasapi.Measure(baseUrl,datetime.now(),'SNM_PCT_USED',str(snmPctUsed),'')
-      stats.handleMeasure(m)
+      stats.handleMeasure(sasapi.Measure(baseUrl,datetime.now(),'SNM_PCT_USED',str(snmPctUsed),'') )
 
 
       print('\n')
@@ -146,13 +146,13 @@ for baseUrl in baseUrls:
       nDaysPastJobs=0
 
       if (   baseUrl == 'https://snamprodgerjob.ondemand.sas.com' 
-           or baseUrl == 'https://snamprodukjob.ondemand.sas.com'
-           or baseUrl == 'https://snamprodmp.ondemand.sas.com'
+            or baseUrl == 'https://snamprodukjob.ondemand.sas.com'
+            or baseUrl == 'https://snamprodmp.ondemand.sas.com'
            ):
          
          if baseUrl == 'https://snamprodgerjob.ondemand.sas.com':
             numberOfMinutesDelay4error=0
-            batchJobsNumber2test=6
+            batchJobsNumber2test=5
          if baseUrl == 'https://snamprodukjob.ondemand.sas.com':
             numberOfMinutesDelay4error=43
             batchJobsNumber2test=1
@@ -189,14 +189,16 @@ for baseUrl in baseUrls:
             pandas.set_option('display.max_colwidth', None)
             print('\n')
             dfJobs.sort_values(by=['giorno','oraZ','jobName'], ascending=True)
-            #print(dfJobs)
+            print('dfJobs - tutti quelli estratti per data e tipologia')
+            print(dfJobs)
             
             # UTC/GMT time
             dt_utcnow = datetime.now(dt.UTC)
             print('UTC time:',dt_utcnow)
             print(dt_utcnow.hour, dt_utcnow.minute)
             
-            dfJobsCurrentHour=dfJobs.loc[( dfJobs['oraZ'] == str(dt_utcnow.hour) ) ]
+            dfJobsCurrentHour=dfJobs.loc[ ( dfJobs['oraZ'] == str(dt_utcnow.hour).zfill(2) ) ]
+
             print('Dettaglio Jobs di questa ORA:')
             print(dfJobsCurrentHour)
 
@@ -209,71 +211,76 @@ for baseUrl in baseUrls:
                   })
             print('\n')
             
-            dfJobsSummaryCurrentHour=dfJobsSummary.loc[
-               ( dfJobsSummary['oraZ'] == str(dt_utcnow.hour) ) 
-               ]
+            dfJobsSummaryCurrentHour=dfJobsSummary.loc[ ( dfJobsSummary['oraZ'] == str(dt_utcnow.hour).zfill(2) ) ]
+                       
+            # debug
+            #dfJobsSummaryCurrentHour=dfJobsSummary.loc[ ( dfJobsSummary['oraZ'] == '99' ) ]
+
+
             print('Summary Jobs di questa ORA:')
             print(dfJobsSummaryCurrentHour)
-            
-            dfJobsAlert=dfJobsSummaryCurrentHour.loc[
-               ( dfJobsSummaryCurrentHour[('jobId', 'count')] < batchJobsNumber2test )
-               |  ( dfJobsSummaryCurrentHour[('minuto', 'max')] > numberOfMinutesDelay4error) 
-               |  ( dfJobsSummaryCurrentHour[('jobState', 'join')].str.contains('failed') ) 
-               ]
-            print('\n')
-            print(dfJobsAlert)
-            if len(dfJobsAlert.index) == 0:
-               stats.handleMeasure(sasapi.Measure(baseUrl,datetime.now(),'CHECK_JOBS_HOURLY',str(dt_utcnow.hour),'OK'))
-               print ('PASS')
+
+            if ( len(dfJobsSummaryCurrentHour.index) == 0 ):
+               print ('FAIL - nessuno partito')
+               # nessun Job partito
+               stats.handleMeasure(sasapi.Measure(baseUrl,datetime.now(),'CHECK_JOBS_HOURLY',str(dt_utcnow.hour),'NESSUNO_PARTITO'))
             else:
-               print ('FAIL')
-               print ('\n')
-               print ('Details:')
-               
-               dfJobsAlertNumberMore=dfJobsSummaryCurrentHour.loc[
-                  ( dfJobsSummaryCurrentHour[('jobId', 'count')] > batchJobsNumber2test )
+               # questi controlli vanno se esiste almeno una riga
+               dfJobsAlertCurrentHour=dfJobsSummaryCurrentHour.loc[
+                  ( dfJobsSummaryCurrentHour[('jobId', 'count')] < batchJobsNumber2test )
+                  |  ( dfJobsSummaryCurrentHour[('minuto', 'max')] > numberOfMinutesDelay4error) 
+                  |  ( dfJobsSummaryCurrentHour[('jobState', 'join')].str.contains('failed') ) 
                   ]
                print('\n')
-               print('Alert Numero Jobs partiti MAGGIORE del previsto: ')
-               if dfJobsAlertNumberMore.empty:
-                  print ('OK')
+               print('dfJobsAlertCurrentHour:')
+               print(dfJobsAlertCurrentHour)
+               if len(dfJobsAlertCurrentHour.index) == 0:
+                  stats.handleMeasure(sasapi.Measure(baseUrl,datetime.now(),'CHECK_JOBS_HOURLY',str(dt_utcnow.hour),'OK'))
+                  print ('PASS')
                else:
-                  print(dfJobsAlertNumberMore)   
-                  stats.handleMeasure(sasapi.Measure(baseUrl,datetime.now(),'CHECK_JOBS_HOURLY',str(dfJobsAlertNumberMore.count),'Jobs partiti MAGGIORE del previsto'))
-               
-               dfJobsAlertStartTime=dfJobsSummaryCurrentHour.loc[( dfJobsSummaryCurrentHour[('minuto', 'max')] > numberOfMinutesDelay4error) ]
-               print('\n')
-               print('Alert Numero Jobs partiti in ritardo: ')
-               if dfJobsAlertStartTime.empty:
-                  print ('OK')
-               else:
-                  print(dfJobsAlertStartTime)
-                  stats.handleMeasure(sasapi.Measure(baseUrl,datetime.now(),'CHECK_JOBS_HOURLY',str(dfJobsAlertStartTime.count),'Jobs partiti in ritardo'))
+                  print ('FAIL')
+                  print ('\n')
+                  print ('Details:')
+                  
+                  dfJobsAlertCurrentHourNumberMore=dfJobsSummaryCurrentHour.loc[
+                     ( dfJobsSummaryCurrentHour[('jobId', 'count')] > batchJobsNumber2test )
+                     ]
+                  print('\n')
+                  print('Alert Numero Jobs partiti MAGGIORE del previsto ('+str(batchJobsNumber2test)+'): ')
+                  if dfJobsAlertCurrentHourNumberMore.empty:
+                     print ('OK')
+                  else:
+                     print(dfJobsAlertCurrentHourNumberMore)   
+                     stats.handleMeasure(sasapi.Measure(baseUrl,datetime.now(),'CHECK_JOBS_HOURLY',str(dfJobsAlertCurrentHourNumberMore[('jobId', 'count')].values[0]),'Jobs partiti MAGGIORE del previsto ('+str(batchJobsNumber2test)+')'))
+                  
+                  dfJobsAlertCurrentHourStartTime=dfJobsSummaryCurrentHour.loc[( dfJobsSummaryCurrentHour[('minuto', 'max')] > numberOfMinutesDelay4error) ]
+                  print('\n')
+                  print('Alert Numero Jobs partiti in ritardo (atteso delay massimo al minuto '+str(numberOfMinutesDelay4error)+'): ')
+                  if dfJobsAlertCurrentHourStartTime.empty:
+                     print ('OK')
+                  else:
+                     print(dfJobsAlertCurrentHourStartTime)
+                     stats.handleMeasure(sasapi.Measure(baseUrl,datetime.now(),'CHECK_JOBS_HOURLY',str(dfJobsAlertCurrentHourStartTime[('jobId', 'count')].values[0]),'Jobs partiti in ritardo (atteso delay massimo al minuto '+str(numberOfMinutesDelay4error)+')'))
 
-               dfJobsAlertNumberLess=dfJobsSummaryCurrentHour.loc[( dfJobsSummaryCurrentHour[('jobId', 'count')] < batchJobsNumber2test ) ]
-               print('\n')
-               print('Alert Numero Jobs partiti MINORE del previsto: ')
-               if dfJobsAlertNumberLess.empty:
-                  print ('OK')
-               else:
-                  print(dfJobsAlertNumberLess)
-                  stats.handleMeasure(sasapi.Measure(baseUrl,datetime.now(),'CHECK_JOBS_HOURLY',str(dfJobsAlertNumberLess.count),'Jobs partiti MINORE del previsto'))
+                  dfJobsAlertCurrentHourNumberLess=dfJobsSummaryCurrentHour.loc[( dfJobsSummaryCurrentHour[('jobId', 'count')] < batchJobsNumber2test ) ]
+                  print('\n')
+                  print('Alert Numero Jobs partiti MINORE del previsto ('+str(batchJobsNumber2test)+'): ')
+                  if dfJobsAlertCurrentHourNumberLess.empty:
+                     print ('OK')
+                  else:
+                     print(dfJobsAlertCurrentHourNumberLess)
+                     stats.handleMeasure(sasapi.Measure(baseUrl,datetime.now(),'CHECK_JOBS_HOURLY',str(  dfJobsAlertCurrentHourNumberLess[('jobId', 'count')].values[0]  ),'Jobs partiti MINORE del previsto ('+str(batchJobsNumber2test)+')'))
 
-               dfJobsAlertFailed=dfJobsSummaryCurrentHour.loc[ ( dfJobsSummaryCurrentHour[('jobState', 'join')].str.contains('failed') )  ]
-               print('\n')
-               print('Alert Jobs FALLITI: ')
-               if dfJobsAlertFailed.empty:
-                  print ('OK')
-               else:
-                  print(dfJobsAlertFailed)
-                  stats.handleMeasure(sasapi.Measure(baseUrl,datetime.now(),'CHECK_JOBS_HOURLY',str(dfJobsAlertFailed.count),'Jobs FALLITI'))
-
-
-print('END ' + datetime.now().strftime("%m/%d/%Y, %H:%M:%S") + '----------------------------------------------------------------------------------------------')
+                  dfJobsAlertCurrentHourFailed=dfJobsSummaryCurrentHour.loc[ ( dfJobsSummaryCurrentHour[('jobState', 'join')].str.contains('failed') )  ]
+                  print('\n')
+                  print('Alert Jobs FALLITI: ')
+                  if dfJobsAlertCurrentHourFailed.empty:
+                     print ('OK')
+                  else:
+                     print(dfJobsAlertCurrentHourFailed)
+                     stats.handleMeasure(sasapi.Measure(baseUrl,datetime.now(),'CHECK_JOBS_HOURLY',str(dfJobsAlertCurrentHourFailed[('jobId', 'count')].values[0]),'Jobs FALLITI'))
 
 
-
-      
 print('END ' + datetime.now().strftime("%m/%d/%Y, %H:%M:%S") + '----------------------------------------------------------------------------------------------')
 
 

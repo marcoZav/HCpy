@@ -257,6 +257,11 @@ class Stats:
    def handleMeasure(self,measure):
       defaultMsg=measure.environment + self.sep + measure.measureName + '=' + measure.measureValue + self.sep + measure.desc
       match measure.measureName:
+         case 'CHECK_JOBS_HOURLY':
+            if ( measure.desc != 'OK' ):
+               self.logger.critical(defaultMsg)
+            else:
+               self.logger.info(defaultMsg)
          case 'SNM_PCT_USED':
             if int(measure.measureValue) <= 10:
                self.logger.info(defaultMsg)
