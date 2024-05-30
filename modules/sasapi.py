@@ -257,6 +257,8 @@ class Stats:
    def handleMeasure(self,measure):
       defaultMsg=measure.environment + self.sep + measure.measureName + '=' + measure.measureValue + self.sep + measure.desc
       match measure.measureName:
+         case 'GET_JOBS_EMPTY':
+            self.logger.error(defaultMsg)
          case 'CHECK_JOBS_HOURLY':
             if ( measure.desc != 'OK' ):
                self.logger.critical(defaultMsg)
