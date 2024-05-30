@@ -57,7 +57,7 @@ numberOfMinutesDelay4error=43
 baseUrl = 'https://snamprodukjob.ondemand.sas.com'
 
 
-batchJobsNumber2test=1
+batchJobsNumber2test=2
 numberOfMinutesDelay4error=3
 nDaysPastJobs=1
 baseUrl = 'https://snamtest.ondemand.sas.com'
