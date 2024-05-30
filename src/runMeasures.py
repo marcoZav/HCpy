@@ -183,6 +183,7 @@ for baseUrl in baseUrls:
          
             if ( len(items) == 0 ):
                print('ELENCO JOBS RESTITUITO HA ZERO ELEMENTI')
+               stats.handleMeasure(sasapi.Measure(baseUrl,datetime.now(),'GET_JOBS_EMPTY','0','ELENCO JOBS RESTITUITO HA ZERO ELEMENTI'))
             else:
                jobsdata=sasapi.buildJobsDataTable(items)     
             

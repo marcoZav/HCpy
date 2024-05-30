@@ -10,7 +10,7 @@ import datetime as dt
 from time import sleep
 
 
-maxIter=3
+maxIter=24*15
 iter=1
 
 # UTC/GMT time
