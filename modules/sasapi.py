@@ -203,9 +203,9 @@ def buildJobsDataTable(items):
     #print(jobsubmittedByApplication)
     if (
        # job execution api 
-       (  jobsubmittedByApplication == 'SASJobExecution' ) 
+       #(  jobsubmittedByApplication == 'SASJobExecution' ) 
+       #| 
        # job schedulati
-       | 
        (  jobsubmittedByApplication == 'jobExecution' ) 
        & ( jobName.find('jmon') == -1 )
        #& ( jobName.find('jmon') >= 0 )
