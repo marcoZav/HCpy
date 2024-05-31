@@ -97,7 +97,7 @@ def getJobs(baseUrl,token,lastDaysNumber):
    #url='https://snamprodgerjob.ondemand.sas.com/jobExecution/jobs?start=0&limit=1000&sortBy=creationTimeStamp:descending&filter=and(ge(creationTimeStamp,%272024-04-25T22:00:00.000Z%27),lt(creationTimeStamp,%272024-04-30T23:59:59.999Z%27))'
    #url = baseUrl + "/jobExecution/jobs?limit=1000"
 
-   dateStart = date.today() - timedelta(lastDaysNumber)
+   dateStart = date.today() - timedelta(hours=24)
    print('Current Date :', date.today())
    print(' dateStart :', dateStart) 
 
