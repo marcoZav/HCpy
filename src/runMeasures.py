@@ -165,7 +165,7 @@ for baseUrl in baseUrls:
             batchJobsNumber2test=0
          if baseUrl == 'https://snamprodmp.ondemand.sas.com':
             numberOfMinutesDelay4error=0
-            batchJobsNumber2test=0
+            batchJobsNumber2test=2
          if baseUrl == 'https://snamtest.ondemand.sas.com':
             numberOfMinutesDelay4error=0
             batchJobsNumber2test=1
