@@ -124,7 +124,7 @@ for baseUrl in baseUrls:
       #print(responseText)
       rj = json.loads(responseText)
       numPods=rj['NumPods']
-      print(numPods)
+      print('num pods:',numPods)
 
       m=sasapi.Measure(baseUrl,datetime.now(),'NUM_COMPUTE_PODS',str(numPods),'')
       stats.handleMeasure(m)
@@ -137,7 +137,7 @@ for baseUrl in baseUrls:
       #print(responseText)
       rj = json.loads(responseText)
       snmPctUsed=rj['snm_pctUsed']
-      print(snmPctUsed)
+      print('file system /snm pctused:',snmPctUsed)
 
       stats.handleMeasure(sasapi.Measure(baseUrl,datetime.now(),'SNM_PCT_USED',str(snmPctUsed),'') )
 
@@ -149,7 +149,7 @@ for baseUrl in baseUrls:
       iter=1
       endWhile=False
 
-      nDaysPastJobs=0
+      nHoursPastJobs=1
 
       if (   baseUrl == 'https://snamprodgerjob.ondemand.sas.com' 
             or baseUrl == 'https://snamprodukjob.ondemand.sas.com'
@@ -171,8 +171,8 @@ for baseUrl in baseUrls:
             batchJobsNumber2test=2
 
          while ( ( iter <= maxIter ) & ( endWhile == False ) ):
-            # terzo parametro, numero di giorni indietro
-            items=sasapi.getJobs(baseUrl,token,nDaysPastJobs)
+            # terzo parametro, numero di ore indietro
+            items=sasapi.getJobs(baseUrl,token,nHoursPastJobs)
             #print(items)
             if ( len(items) == 0 ):
                print('ELENCO JOBS RESTITUITO HA ZERO ELEMENTI. Iter=', iter)
@@ -206,9 +206,10 @@ for baseUrl in baseUrls:
                   # UTC/GMT time
                   dt_utcnow = datetime.now(dt.UTC)
                   print('UTC time:',dt_utcnow)
-                  print(dt_utcnow.hour, dt_utcnow.minute)
+                  print(dt_utcnow.date(),dt_utcnow.hour, dt_utcnow.minute)
                   
-                  dfJobsCurrentHour=dfJobs.loc[ ( dfJobs['oraZ'] == str(dt_utcnow.hour).zfill(2) ) ]
+                  dfJobsCurrentHour=dfJobs.loc[ ( dfJobs['oraZ'] == str(dt_utcnow.hour).zfill(2) )  & ( dfJobs['giorno'] == str(dt_utcnow.date()) ) ]
+                  
 
                   print('Dettaglio Jobs di questa ORA:')
                   print(dfJobsCurrentHour)
@@ -222,7 +223,7 @@ for baseUrl in baseUrls:
                         })
                   print('\n')
                   
-                  dfJobsSummaryCurrentHour=dfJobsSummary.loc[ ( dfJobsSummary['oraZ'] == str(dt_utcnow.hour).zfill(2) ) ]
+                  dfJobsSummaryCurrentHour=dfJobsSummary.loc[ ( dfJobsSummary['oraZ'] == str(dt_utcnow.hour).zfill(2) ) & ( dfJobs['giorno'] == str(dt_utcnow.date()) ) ]
                            
                   # debug
                   #dfJobsSummaryCurrentHour=dfJobsSummary.loc[ ( dfJobsSummary['oraZ'] == '99' ) ]
