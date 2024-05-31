@@ -168,7 +168,7 @@ for baseUrl in baseUrls:
             batchJobsNumber2test=0
          if baseUrl == 'https://snamtest.ondemand.sas.com':
             numberOfMinutesDelay4error=0
-            batchJobsNumber2test=2
+            batchJobsNumber2test=1
 
          while ( ( iter <= maxIter ) & ( endWhile == False ) ):
             # terzo parametro, numero di ore indietro
