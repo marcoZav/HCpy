@@ -5,6 +5,9 @@ import json
 
 from datetime import datetime
 from datetime import date, timedelta
+#per prendere datetime.UTC
+import datetime as dt   
+
 import traceback 
 import sys
 
@@ -91,18 +94,19 @@ def getContextDefinitionAttributes(baseUrl,contextId,token):
 
 
 
-def getJobs(baseUrl,token,lastDaysNumber):
+def getJobs(baseUrl,token,lastHoursNumber):
    #url='https://snamprodgerjob.ondemand.sas.com/jobExecution/jobs?start=0&limit=20&sortBy=creationTimeStamp:descending&filter=and(ge(creationTimeStamp,%272024-04-25T02:56:54.277Z%27),lt(creationTimeStamp,%272024-04-26T02:56:54.277Z%27))'
    #url='https://snamprodgerjob.ondemand.sas.com/jobExecution/jobs?start=0&limit=400&sortBy=creationTimeStamp:descending&filter=and(ge(creationTimeStamp,%272024-04-25T20:00:00.000Z%27))'
    #url='https://snamprodgerjob.ondemand.sas.com/jobExecution/jobs?start=0&limit=1000&sortBy=creationTimeStamp:descending&filter=and(ge(creationTimeStamp,%272024-04-25T22:00:00.000Z%27),lt(creationTimeStamp,%272024-04-30T23:59:59.999Z%27))'
    #url = baseUrl + "/jobExecution/jobs?limit=1000"
 
-   dateStart = date.today() - timedelta(lastDaysNumber)
-   print('Current Date :', date.today())
-   print(' dateStart :', dateStart) 
+ 
+   dtNow=datetime.now(dt.UTC)
+   #print(dtNow)
+   dtStart = dtNow - timedelta(hours=lastHoursNumber)
+   #print(dtStart)
 
-   url = baseUrl + "/jobExecution/jobs?start=0&limit=4000&sortBy=creationTimeStamp:ascending&filter=and(ge(creationTimeStamp,%27" + dateStart.strftime("%Y-%m-%d") + "T00:00:00.000Z%27))"
-   #url = baseUrl + "/jobExecution/jobs?limit=1000"
+   url = baseUrl + "/jobExecution/jobs?start=0&limit=4000&sortBy=creationTimeStamp:ascending&filter=and(ge(creationTimeStamp,%27" + dtStart.strftime("%Y-%m-%dT%H:%M:%S.000Z") + "%27))"
    print (url)
 
    payload = {}
