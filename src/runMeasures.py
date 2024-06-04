@@ -19,6 +19,9 @@ sys.path.insert(0, dname + '/../modules')
 logfolder=dname + '/../logs'
 print(logfolder)
 
+cfgFile=dname + '/../cfg/cfg.ini'
+print(cfgFile)
+
 
 import sasapi
 
@@ -53,6 +56,7 @@ logging.basicConfig(
    )
 
 
+restApi=sasapi.RestApi(logger,cfgFile)
 
 
 baseUrls = [
@@ -76,13 +80,13 @@ for baseUrl in baseUrls:
    print (baseUrl)
    print('-- Get Token:')
        
-   maxIter=3
+   maxIter=5
    iter=1
    endWhile=False
 
    while ( ( iter <= maxIter ) & ( endWhile == False ) ):
       print('Tentative # ', iter , ' of ', maxIter)
-      out=sasapi.getToken(baseUrl)
+      out=restApi.getToken(baseUrl)
    
       token=out["token"]
       elapsed=out["elapsedMs"]
@@ -98,9 +102,10 @@ for baseUrl in baseUrls:
          if (description=='GENERIC_ERROR'):
             description=traceBackText
             print('Traceback',description)
-         iter=iter+1
+         
          stats.handleMeasure(sasapi.Measure(baseUrl,datetime.now(),'GET_TOKEN_RETRY',str(httpStatusCode),description))
-         sleep(5)
+         sleep(5*iter)
+         iter=iter+1
       else:
          endWhile=True
 
@@ -119,7 +124,7 @@ for baseUrl in baseUrls:
       print('-- RUN Job Executions')
       pgmUrl = 'https://raw.githubusercontent.com/marcoZav/opsMng/main/getComputePodsNumber.sas'
 
-      response=sasapi.runJobExecution(baseUrl,token,'%2FSNM%2Futility_jobs%2Fexec_pgm_from_url',"pgm_url=" + pgmUrl)
+      response=restApi.runJobExecution(baseUrl,token,'%2FSNM%2Futility_jobs%2Fexec_pgm_from_url',"pgm_url=" + pgmUrl)
       responseText=response.text
       #print(responseText)
       rj = json.loads(responseText)
@@ -132,7 +137,7 @@ for baseUrl in baseUrls:
 
       pgmUrl = 'https://raw.githubusercontent.com/marcoZav/opsMng/main/getSnmFileSystemPctUsed.sas'
 
-      response=sasapi.runJobExecution(baseUrl,token,'%2FSNM%2Futility_jobs%2Fexec_pgm_from_url',"pgm_url=" + pgmUrl)
+      response=restApi.runJobExecution(baseUrl,token,'%2FSNM%2Futility_jobs%2Fexec_pgm_from_url',"pgm_url=" + pgmUrl)
       responseText=response.text
       #print(responseText)
       rj = json.loads(responseText)
@@ -172,7 +177,7 @@ for baseUrl in baseUrls:
 
          while ( ( iter <= maxIter ) & ( endWhile == False ) ):
             # terzo parametro, numero di ore indietro
-            items=sasapi.getJobs(baseUrl,token,nHoursPastJobs)
+            items=restApi.getJobs(baseUrl,token,nHoursPastJobs)
             #print(items)
             if ( len(items) == 0 ):
                print('ELENCO JOBS RESTITUITO HA ZERO ELEMENTI. Iter=', iter)
@@ -185,7 +190,7 @@ for baseUrl in baseUrls:
                print('ELENCO JOBS RESTITUITO HA ZERO ELEMENTI')
                stats.handleMeasure(sasapi.Measure(baseUrl,datetime.now(),'GET_JOBS_EMPTY','0','ELENCO JOBS RESTITUITO HA ZERO ELEMENTI'))
             else:
-               jobsdata=sasapi.buildJobsDataTable(items)     
+               jobsdata=restApi.buildJobsDataTable(items)     
                
                #check se ci sono job del tipo filtrato sopra
                n=len(jobsdata) 

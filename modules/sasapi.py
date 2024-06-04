@@ -51,10 +51,12 @@ class Stats:
                self.logger.info(defaultMsg)
             elif int(measure.measureValue) > 10 and int(measure.measureValue) < 100:
                self.logger.warning(defaultMsg)
-            elif int(measure.measureValue) >= 100:
+            elif int(measure.measureValue) >= 100 and int(measure.measureValue) < 200:
                self.logger.error(defaultMsg)
+            elif int(measure.measureValue) >= 200:
+               self.logger.critical(defaultMsg)
          case "GET_TOKEN_ERROR":
-            self.logger.error(defaultMsg)
+            self.logger.critical(defaultMsg)
          case "GET_TOKEN_ELAPSED":
             if float(measure.measureValue) > 600:
                self.logger.warning(defaultMsg)
