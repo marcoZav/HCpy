@@ -26,41 +26,27 @@ from datetime import datetime
 from time import sleep
 
 
-
-
-
-
-# dalle 12:00 ora italiana del 9 maggio, portati a 4 i job su mp (01--04)
-# un errore il 18 maggio alle 13Z, proprio quando si è risolto il prob di azcopy
-# sembra che i lmio job di login infinite abbia mandato il launcher in out of resources
-# 3 jobs schedulati sono falliti e i pod sono tutti cmabiati, come una caduta e riavvio del launcher forse 
-numberOfMinutesDelay4error=0
-batchJobsNumber2test=4
-nDaysPastJobs=1
-baseUrl = 'https://snamprodmp.ondemand.sas.com'
-
-
-
-
-numberOfMinutesDelay4error=0
-batchJobsNumber2test=5
-nDaysPastJobs=7
-baseUrl = 'https://snamprodgerjob.ondemand.sas.com'
-
-
-
-
-
-batchJobsNumber2test=1
-nDaysPastJobs=3
+batchJobsNumber2test=2
+nHoursPastJobs=24
 numberOfMinutesDelay4error=43
 baseUrl = 'https://snamprodukjob.ondemand.sas.com'
 
-
-batchJobsNumber2test=2
+batchJobsNumber2test=1
 numberOfMinutesDelay4error=3
-nDaysPastJobs=1
+nHoursPastJobs=72
 baseUrl = 'https://snamtest.ondemand.sas.com'
+
+numberOfMinutesDelay4error=0
+batchJobsNumber2test=4
+nHoursPastJobs=48
+baseUrl = 'https://snamprodmp.ondemand.sas.com'
+
+
+numberOfMinutesDelay4error=0
+batchJobsNumber2test=2
+nHoursPastJobs=72
+baseUrl = 'https://snamprodgerjob.ondemand.sas.com'   
+
 
 
 # -----------------------------------------------------------------------------------------------------------------
@@ -192,8 +178,8 @@ endWhile=False
 
 
 while ( ( iter <= maxIter ) & ( endWhile == False ) ):
-   # terzo parametro, numero di giorni indietro
-   items=sasapi.getJobs(baseUrl,token,nDaysPastJobs)
+   # terzo parametro, numero di ORE indietro
+   items=sasapi.getJobs(baseUrl,token,nHoursPastJobs)
    #print(items)
    if ( len(items) == 0 ):
       print('ELENCO JOBS RESTITUITO HA ZERO ELEMENTI. Iter=', iter)
