@@ -1,7 +1,6 @@
 #
 # PER MONITORARE IL SISTEMA SERVE IL RUOLO PER VEDERE I JOB LANCIATI DAGLI ALTRI
 #
-# cpc
 
 
 import os
@@ -18,12 +17,41 @@ sys.path.insert(0, dname + '\\..\\modules')
 
 import sasapi
 
-
-
 import pandas
-from datetime import datetime
 
+from datetime import datetime
 from time import sleep
+
+import os
+import sys
+
+currentPyFileAbspath = os.path.abspath(__file__)
+dname = os.path.dirname(currentPyFileAbspath)
+#logfolder=dname + '\\..\\logs'
+logfolder=dname + '/../logs'
+print(logfolder)
+
+cfgFile=dname + '/../cfg/cfg.ini'
+print(cfgFile)
+
+
+
+import logging
+logger = logging.getLogger(__name__)
+logging.basicConfig(
+   #per funzionare anche su linux
+   #filename=logfolder+'\\'+'stats.log'
+   filename=logfolder+'/'+'stats.log'
+   , encoding='utf-8'
+   , format='%(asctime)s %(levelname)-8s %(message)s'
+   , datefmt='%Y-%m-%d %H:%M:%S'
+   #, level=logging.DEBUG
+   , level=logging.INFO
+   )
+
+
+restApi=sasapi.RestApi(logger,cfgFile)
+
 
 
 batchJobsNumber2test=2
@@ -31,10 +59,7 @@ nHoursPastJobs=24
 numberOfMinutesDelay4error=43
 baseUrl = 'https://snamprodukjob.ondemand.sas.com'
 
-batchJobsNumber2test=1
-numberOfMinutesDelay4error=3
-nHoursPastJobs=72
-baseUrl = 'https://snamtest.ondemand.sas.com'
+
 
 numberOfMinutesDelay4error=0
 batchJobsNumber2test=4
@@ -47,7 +72,10 @@ batchJobsNumber2test=2
 nHoursPastJobs=72
 baseUrl = 'https://snamprodgerjob.ondemand.sas.com'   
 
-
+batchJobsNumber2test=1
+numberOfMinutesDelay4error=3
+nHoursPastJobs=72
+baseUrl = 'https://snamtest.ondemand.sas.com'
 
 # -----------------------------------------------------------------------------------------------------------------
 
@@ -74,7 +102,7 @@ endWhile=False
 
 while ( ( iter <= maxIter ) & ( endWhile == False ) ):
    print('Tentative # ', iter , ' of ', maxIter)
-   out=sasapi.getToken(baseUrl)
+   out=restApi.getToken(baseUrl)
    
    token=out["token"]
    elapsed=out["elapsedMs"]
@@ -104,25 +132,25 @@ print('TOKEN ' + datetime.now().strftime("%m/%d/%Y, %H:%M:%S") + ' -------------
 
 print('\n')
 print('-- Get sas.scheduler Conf:')
-items=sasapi.getConfigurationDefinition(baseUrl,token,'sas.scheduler')
+items=restApi.getConfigurationDefinition(baseUrl,token,'sas.scheduler')
 print(items)
 
 print('\n')
 print('-- Get sas.authorization Conf:')
-items=sasapi.getConfigurationDefinition(baseUrl,token,'sas.authorization')
+items=restApi.getConfigurationDefinition(baseUrl,token,'sas.authorization')
 print(items)
 
 
 print('\n')
 print('-- Get Identities Conf:')
-items=sasapi.getConfigurationDefinition(baseUrl,token,'sas.identities')
+items=restApi.getConfigurationDefinition(baseUrl,token,'sas.identities')
 #items=getIdentitiesConf(baseUrl,token)
 print(items)
 
 
 print('\n')
 print('-- Get sas.logon.jwt Conf:')
-items=sasapi.getConfigurationDefinition(baseUrl,token,'sas.logon.jwt')
+items=restApi.getConfigurationDefinition(baseUrl,token,'sas.logon.jwt')
 #items=getIdentitiesConf(baseUrl,token)
 print(items)
 
@@ -144,7 +172,7 @@ sas.logon.sessions
 print('\n')
 print('-- Get Compute Contexts:')
 
-items=sasapi.getComputeContexts(baseUrl,token)
+items=restApi.getComputeContexts(baseUrl,token)
 for item in items:
   contextName=item['name'] 
   contextId=item['id'] 
@@ -163,7 +191,7 @@ print('\n')
 print('-- Get Job Execution Compute Context details:')
 
 
-contextAttributes=sasapi.getContextDefinitionAttributes(baseUrl,jobExecutionContextId,token)
+contextAttributes=restApi.getContextDefinitionAttributes(baseUrl,jobExecutionContextId,token)
 print(' context Attributes:')
 print (contextAttributes)
 
@@ -179,7 +207,7 @@ endWhile=False
 
 while ( ( iter <= maxIter ) & ( endWhile == False ) ):
    # terzo parametro, numero di ORE indietro
-   items=sasapi.getJobs(baseUrl,token,nHoursPastJobs)
+   items=restApi.getJobs(baseUrl,token,nHoursPastJobs)
    #print(items)
    if ( len(items) == 0 ):
       print('ELENCO JOBS RESTITUITO HA ZERO ELEMENTI. Iter=', iter)
@@ -362,7 +390,7 @@ pgmUrl = 'https://raw.githubusercontent.com/marcoZav/test01/master/Program1.sas'
 pgmUrl = 'https://raw.githubusercontent.com/marcoZav/opsMng/main/getComputePods.sas'
 #pgmUrl = 'https://raw.githubusercontent.com/marcoZav/opsMng/main/getPodByName.sas&parms=sas-compute-server-0accbd2e-1485-46c9-99c4-1c8e883e5614-35387';
 
-response=sasapi.runJobExecution(baseUrl,token,'%2FSNM%2Futility_jobs%2Fexec_pgm_from_url',"pgm_url=" + pgmUrl)
+response=restApi.runJobExecution(baseUrl,token,'%2FSNM%2Futility_jobs%2Fexec_pgm_from_url',"pgm_url=" + pgmUrl)
 print(response.text)
 
 print('END ' + datetime.now().strftime("%m/%d/%Y, %H:%M:%S") + '----------------------------------------------------------------------------------------------')
