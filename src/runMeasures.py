@@ -159,16 +159,16 @@ for baseUrl in baseUrls:
          
          if baseUrl == 'https://snamprodgerjob.ondemand.sas.com':
             numberOfMinutesDelay4error=0
-            batchJobsNumber2test=5
+            batchJobsNumber2test=0
          if baseUrl == 'https://snamprodukjob.ondemand.sas.com':
             numberOfMinutesDelay4error=43
-            batchJobsNumber2test=1
+            batchJobsNumber2test=0
          if baseUrl == 'https://snamprodmp.ondemand.sas.com':
             numberOfMinutesDelay4error=0
-            batchJobsNumber2test=4
+            batchJobsNumber2test=2
          if baseUrl == 'https://snamtest.ondemand.sas.com':
             numberOfMinutesDelay4error=0
-            batchJobsNumber2test=2
+            batchJobsNumber2test=1
 
          while ( ( iter <= maxIter ) & ( endWhile == False ) ):
             # terzo parametro, numero di ore indietro

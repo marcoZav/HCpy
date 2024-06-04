@@ -26,22 +26,6 @@ from datetime import datetime
 from time import sleep
 
 
-
-
-
-
-
-
-
-
-
-numberOfMinutesDelay4error=0
-batchJobsNumber2test=2
-nHoursPastJobs=72
-baseUrl = 'https://snamprodgerjob.ondemand.sas.com'   
-
-
-
 batchJobsNumber2test=2
 nHoursPastJobs=24
 numberOfMinutesDelay4error=43
@@ -56,6 +40,14 @@ numberOfMinutesDelay4error=0
 batchJobsNumber2test=4
 nHoursPastJobs=48
 baseUrl = 'https://snamprodmp.ondemand.sas.com'
+
+
+numberOfMinutesDelay4error=0
+batchJobsNumber2test=2
+nHoursPastJobs=72
+baseUrl = 'https://snamprodgerjob.ondemand.sas.com'   
+
+
 
 # -----------------------------------------------------------------------------------------------------------------
 
