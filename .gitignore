@@ -1,1 +1,6 @@
 cfg/cfg.ini
+logs/stats.log
+modules/__pycache__
+
+
+
