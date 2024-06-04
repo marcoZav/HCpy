@@ -220,7 +220,7 @@ class RestApi:
          print('response.status_code=', response.status_code)
       except requests.exceptions.Timeout:
          print("timeout")
-      print(response.text)
+      #print(response.text)
       rj = json.loads(response.text)
       items=rj['items']
       #print(items)
