@@ -16,12 +16,30 @@ import logging
 
 def getToken(baseUrl):
    url = baseUrl + "/SASLogon/oauth/token"
-   payload = 'grant_type=password&username=itamrz&password=Vitamina.002'
-   headers = {
-  'Content-Type': 'application/x-www-form-urlencoded',
-  'Authorization': 'Basic c2FzLmVjOg=='
-  }
-   
+
+   if (baseUrl != 'https://snamtest.ondemand.sas.com'):
+      payload = 'grant_type=password&username=itamrz&password=Vitamina.002'
+      headers = {
+         'Content-Type': 'application/x-www-form-urlencoded',
+         'Authorization': 'Basic c2FzLmVjOg=='
+         }
+   else:
+      '''   
+      # non legge i jobs
+      payload = 'grant_type=client_credentials'
+      headers = {
+         'Content-Type': 'application/x-www-form-urlencoded',
+         'Authorization': 'Basic c2FzLmNsaWVudF9ndDM6WTB4VlpPMEZQU0JMMFBZQ0J4bDF5SFNWNA=='
+         }  
+      '''
+      # con il refresh token invece li legge
+      rt='eyJhbGciOiJSUzI1NiIsImprdSI6Imh0dHBzOi8vbG9jYWxob3N0L1NBU0xvZ29uL3Rva2VuX2tleXMiLCJraWQiOiJsZWdhY3ktdG9rZW4ta2V5IiwidHlwIjoiSldUIn0.eyJqdGkiOiI1MDI1MTQ0NDE0NGE0ZTBiOTg3MjBkYmM1Mzc4MzM2Yi1yIiwic3ViIjoiNDg1YjNjMjItNTU0Ny00OGI1LWFjNWQtMzdmMTg2NWVjZmRkIiwiaWF0IjoxNzE3NTA5NDMxLCJleHAiOjIxOTA1NDk0MzEsImNpZCI6InNhcy5jbGllbnRfZ3QzIiwiY2xpZW50X2lkIjoic2FzLmNsaWVudF9ndDMiLCJpc3MiOiJodHRwOi8vbG9jYWxob3N0L1NBU0xvZ29uL29hdXRoL3Rva2VuIiwiemlkIjoidWFhIiwiYXVkIjpbIm9wZW5pZCIsInNhcy5jbGllbnRfZ3QzIl0sImdyYW50ZWRfc2NvcGVzIjpbIm9wZW5pZCJdLCJhbXIiOlsiZXh0IiwicHdkIl0sImF1dGhfdGltZSI6MTcxNzUwOTQzMSwiYXV0aG9yaXRpZXMiOlsiU05NIERldmVsb3BlcnMiLCJzbm1hcHAiLCJTQVNTY29yZVVzZXJzIiwiRGF0YUJ1aWxkZXJzIiwiQXBwbGljYXRpb25BZG1pbmlzdHJhdG9ycyIsIkVzcmlVc2VycyIsIlNOTV9TY2hlZHVsZV9Hcm91cCJdLCJleHRfaWQiOiJjbj1pdGFtcnosb3U9VXNlcnMsb3U9U0FTLGRjPXZzcCxkYz1zYXMsZGM9Y29tIiwiZ3JhbnRfdHlwZSI6InBhc3N3b3JkIiwidXNlcl9uYW1lIjoiaXRhbXJ6Iiwib3JpZ2luIjoibGRhcCIsInVzZXJfaWQiOiI0ODViM2MyMi01NTQ3LTQ4YjUtYWM1ZC0zN2YxODY1ZWNmZGQiLCJyZXZfc2lnIjoiNzM1MjAxM2EifQ.ZvtUmIwZ6JVG75dFLfELEYJBF_sT4AnfOhEoccgfTUO5gBgqinwMud9Wj6YKVgl6N3zjINgLhCIuwFXHwWE3LPt1YZ5AWO7Ryh0-hEg_XBrpIFMmU8C806x5myrS068-axAMkjomPDcc9ibSdFH3VmxJsY1SWp0Q4lAy7HHvzagGgIFvD-3DtRiWaCKsmdlO6pDS_3sfB4cJoPxxOIMV2tsLsMXoNScbzVAdTxipzGC_AIANi_4ImSDAQDKeWXXepcvsFLe1a-A4VEBcQ4vg69rE6UEc9wUWkRH9ps5_h887TGYvwnLFMyo7PX2FjFYbLrLc-lVHDUVcKmPxcFarEA'
+      payload = 'grant_type=refresh_token&refresh_token='+rt
+      headers = {
+         'Content-Type': 'application/x-www-form-urlencoded',
+         'Authorization': 'Basic c2FzLmNsaWVudF9ndDM6WTB4VlpPMEZQU0JMMFBZQ0J4bDF5SFNWNA=='
+         }  
+      
    outDesc='Ko'
    startDt=datetime.now()
    endDt=datetime.now()
