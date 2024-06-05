@@ -241,11 +241,16 @@ class RestApi:
          }
       try:
          response = requests.request("GET", url, headers=headers, data=payload, allow_redirects=True, timeout=90)
-         print(response.text)
+         #print(response.text)
          return response
       except requests.exceptions.Timeout:
          print("timeout")
          return {'ERROR: Timeout'}
+      except Exception as e:
+         outDesc='GENERIC_ERROR'
+         traceBackText=traceback.format_exception(*sys.exc_info())
+         print(traceBackText)
+         return {outDesc}
    
 
    def getConfigurationDefinition(self,baseUrl,token,definitionItem):
