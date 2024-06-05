@@ -349,4 +349,5 @@ class RestApi:
       print(parms)
 
       resp=self.runJobExecution(baseUrl,token,contentPathJobExRunPgm,"pgm_url=" + pgmUrl + '&parms='+ parms)
-      print(resp)
+      #print(resp)
+      return resp

@@ -42,8 +42,8 @@ run;
 
 
 filename msg email 
- to="&toList."
- from="&sender."
+ to=&toList.
+ from=&sender.
  subject = "&subject.";
 
 data _null_;
