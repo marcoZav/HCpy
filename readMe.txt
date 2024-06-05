@@ -12,6 +12,9 @@ cfg.ini
 
 contenuto:
 
+[email]
+emails_from=< mittente delle email di sistema. es: replies-disabled@cloud-SAS.com >
+
 [app client]
 basic_authorization=< la basic auth con utente/pw del client API encodate in base 64 come fa postman >
 refresh_token=< il refresh token del client, ottenuto da una chiamata di tipo password >

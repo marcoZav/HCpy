@@ -72,30 +72,29 @@ class RestApi:
        
        self.logger=logger
 
-       self.aaaa = 'aaaa'
+       self.emailFrom=
 
        config = configparser.ConfigParser()
        config.read(cfgFile)
 
-       api_client_basic_authorization = config.get('app client', 'basic_authorization')
-       api_client_refresh_token = config.get('app client', 'refresh_token')
+       self.api_client_basic_authorization = config.get('app client', 'basic_authorization')
+       self.api_client_refresh_token = config.get('app client', 'refresh_token')
        
-       default_api_client_username = config.get('default client', 'username')
-       default_api_client_password = config.get('default client', 'password')
-       default_api_client_basic_authorization = config.get('default client', 'basic_authorization')
+       self.default_api_client_username = config.get('default client', 'username')
+       self.default_api_client_password = config.get('default client', 'password')
+       self.default_api_client_basic_authorization = config.get('default client', 'basic_authorization')
+
+       self.emailsFrom = config.get('email', 'emails_from')
+
 
        '''
-       print(api_client_basic_authorization)
-       print(api_client_refresh_token)
-       print(default_api_client_username)
-       print(default_api_client_password)
-       print(default_api_client_basic_authorization)
+       print(self.api_client_basic_authorization)
+       print(self.api_client_refresh_token)
+       print(self.default_api_client_username)
+       print(self.default_api_client_password)
+       print(self.default_api_client_basic_authorization)
+       print(self.emailsFrom)
        '''
-       self.api_client_basic_authorization = api_client_basic_authorization
-       self.api_client_refresh_token = api_client_refresh_token
-       self.default_api_client_username = default_api_client_username
-       self.default_api_client_password = default_api_client_password
-       self.default_api_client_basic_authorization = default_api_client_basic_authorization
    
    def getToken(self,baseUrl):
       
@@ -166,8 +165,6 @@ class RestApi:
          }
       #return token
       return out
-
-
 
    def getComputeContexts(self,baseUrl,token):
       payload = {}
@@ -339,11 +336,7 @@ class RestApi:
                })
          
       return jobsdata
-
-
-
-
-
-
-
-
+   
+   def sendMail(toList,subject,body):
+      program=''
+      self.runJobExecution(baseUrl,token,program,parms)
