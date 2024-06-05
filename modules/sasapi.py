@@ -84,6 +84,8 @@ class RestApi:
 
        self.emailsFrom = config.get('email', 'emails_from')
 
+       self.jobexec_pgm_from_url=config.get('jobs', 'jobexec_pgm_from_url')
+
 
        '''
        print(self.api_client_basic_authorization)
@@ -92,6 +94,7 @@ class RestApi:
        print(self.default_api_client_password)
        print(self.default_api_client_basic_authorization)
        print(self.emailsFrom)
+       print(self.jobexec_pgm_from_url)
        '''
    
    def getToken(self,baseUrl):
@@ -337,17 +340,14 @@ class RestApi:
       return jobsdata
    
    def sendMail(self,baseUrl,token, toList,subject,body):
-      
-      # todo - da mettere in file cfg
-      # exec_pgm_from_url ha come parametri: pgm_url=, parms=
-      contentPathJobExRunPgm='%2FSNM%2Futility_jobs%2Fexec_pgm_from_url'
-
 
       pgmUrl = 'https://raw.githubusercontent.com/marcoZav/HCpy/main/jobex/sendMail.sas'
 
       parms='toList:' + toList + '|sender:'+ self.emailsFrom + '|subject:'+ subject +'|body:' + body
       print(parms)
 
-      resp=self.runJobExecution(baseUrl,token,contentPathJobExRunPgm,"pgm_url=" + pgmUrl + '&parms='+ parms)
+      # exec_pgm_from_url ha come parametri: pgm_url=, parms=
+      
+      resp=self.runJobExecution(baseUrl,token,self.jobexec_pgm_from_url,"pgm_url=" + pgmUrl + '&parms='+ parms)
       #print(resp)
       return resp

@@ -24,6 +24,9 @@ username=< username viya >
 password=< pw di utenza viya >
 basic_authorization=< la basic auth con utente/pw del client API encodate in base 64 come fa postman >
 
+[jobs]
+jobexec_pgm_from_url=<path nel content della job execution per lanciare pgm generico da url, es.%2FSNM%2Futility_jobs%2Fexec_pgm_from_url>
+
 
 
 # vs code, da git bash:

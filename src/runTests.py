@@ -52,8 +52,7 @@ logging.basicConfig(
 
 restApi=sasapi.RestApi(logger,cfgFile)
 
-# todo - da mettere in file cfg
-contentPathJobExRunPgm='%2FSNM%2Futility_jobs%2Fexec_pgm_from_url'
+contentPathJobExRunPgm=restApi.jobexec_pgm_from_url
 
 
 
@@ -136,12 +135,11 @@ print('TOKEN ' + datetime.now().strftime("%m/%d/%Y, %H:%M:%S") + ' -------------
 print('\n')
 print('sendmail')
 
-# FORMATO DA PASSARE PER INDIRIZZI MULTIPLI - da testare non dà errore ma non mi pare funzionare
-#ret=restApi.sendMail(baseUrl,token,'("marco.zavarini@sas.com" "marco.zavarini@sas.com")','test','testbody')
-
+# FORMATO DA PASSARE PER INDIRIZZI MULTIPLI 
+ret=restApi.sendMail(baseUrl,token,'("marco.zavarini@sas.com" "marco.zavarini@sas.com")','test','test\nbody')
 
 # \n va a capo correttamente
-#ret=restApi.sendMail(baseUrl,token,'marco.zavarini@sas.com','test','testbody \n ciao3')
+#ret=restApi.sendMail(baseUrl,token,'"marco.zavarini@sas.com"','test','testbody \n ciao3')
 
 print(ret)
 
