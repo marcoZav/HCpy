@@ -68,16 +68,19 @@ batchJobsNumber2test=4
 nHoursPastJobs=48
 baseUrl = 'https://snamprodmp.ondemand.sas.com'
 
+batchJobsNumber2test=1
+numberOfMinutesDelay4error=3
+nHoursPastJobs=72
+baseUrl = 'https://snamtest.ondemand.sas.com'
 
 numberOfMinutesDelay4error=0
 batchJobsNumber2test=2
 nHoursPastJobs=72
 baseUrl = 'https://snamprodgerjob.ondemand.sas.com'   
 
-batchJobsNumber2test=1
-numberOfMinutesDelay4error=3
-nHoursPastJobs=72
-baseUrl = 'https://snamtest.ondemand.sas.com'
+
+
+
 
 # -----------------------------------------------------------------------------------------------------------------
 
@@ -132,6 +135,11 @@ if ( httpStatusCode != 200 ):
 #print(token)
 print('TOKEN ' + datetime.now().strftime("%m/%d/%Y, %H:%M:%S") + ' ----------------------------')
 
+
+
+
+
+'''
 print('\n')
 print('sendmail')
 
@@ -142,6 +150,10 @@ ret=restApi.sendMail(baseUrl,token,'("marco.zavarini@sas.com" "marco.zavarini@sa
 #ret=restApi.sendMail(baseUrl,token,'"marco.zavarini@sas.com"','test','testbody \n ciao3')
 
 print(ret)
+'''
+
+
+
 
 
 print('\n')
@@ -400,14 +412,25 @@ else:
 print('\n')
 print('-- RUN Job Execution:')
 
-pgmUrl = 'https://raw.githubusercontent.com/marcoZav/test01/master/Program1.sas'
 pgmUrl = 'https://raw.githubusercontent.com/marcoZav/opsMng/main/getComputePods.sas'
-#pgmUrl = 'https://raw.githubusercontent.com/marcoZav/opsMng/main/getPodByName.sas&parms=sas-compute-server-0accbd2e-1485-46c9-99c4-1c8e883e5614-35387';
 
+out=restApi.runJobExecution(baseUrl,token,contentPathJobExRunPgm,"pgm_url=" + pgmUrl)
 
+elapsed=out["elapsedMs"]
+httpStatusCode=out["httpStatusCode"]
+Description=out["Description"]
+traceBackText=out['Traceback']
+response=out["Response"]
+   
+print("httpStatusCode", httpStatusCode)
+print('Ms: ', elapsed)
+   
+if ( httpStatusCode != 200):
+   print('Description',Description)
+   if (Description=='GENERIC_ERROR'):
+      print('Traceback',traceBackText)
 
-response=restApi.runJobExecution(baseUrl,token,contentPathJobExRunPgm,"pgm_url=" + pgmUrl)
-print(response.text)
+print('*** runJobExecution response: *** \n '+response)
 
 print('END ' + datetime.now().strftime("%m/%d/%Y, %H:%M:%S") + '----------------------------------------------------------------------------------------------')
 

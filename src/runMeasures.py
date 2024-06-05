@@ -122,29 +122,68 @@ for baseUrl in baseUrls:
 
       print('TOKEN ' + datetime.now().strftime("%m/%d/%Y, %H:%M:%S") + ' ----------------------------')
       print('-- RUN Job Executions')
+
+      print('\n -- NUM_COMPUTE_PODS')
       pgmUrl = 'https://raw.githubusercontent.com/marcoZav/opsMng/main/getComputePodsNumber.sas'
 
-      response=restApi.runJobExecution(baseUrl,token,'%2FSNM%2Futility_jobs%2Fexec_pgm_from_url',"pgm_url=" + pgmUrl)
-      responseText=response.text
-      #print(responseText)
-      rj = json.loads(responseText)
-      numPods=rj['NumPods']
-      print('num pods:',numPods)
+      out=restApi.runJobExecution(baseUrl,token,'%2FSNM%2Futility_jobs%2Fexec_pgm_from_url',"pgm_url=" + pgmUrl)
 
-      m=sasapi.Measure(baseUrl,datetime.now(),'NUM_COMPUTE_PODS',str(numPods),'')
-      stats.handleMeasure(m)
+      elapsed=out["elapsedMs"]
+      httpStatusCode=out["httpStatusCode"]
+      Description=out["Description"]
+      traceBackText=out['Traceback']
+      response=out["Response"]
+   
+      print("httpStatusCode", httpStatusCode)
+      print('Ms: ', elapsed)
+      print('*** runJobExecution response: *** \n '+response)
+
+      if ( httpStatusCode != 200):
+         print('Description',Description)
+         if (Description=='GENERIC_ERROR'):
+            print('Traceback',traceBackText)
+         stats.handleMeasure(sasapi.Measure(baseUrl,datetime.now(),'GET_NUM_COMPUTE_PODS_ERROR',str(httpStatusCode),response+'///'+Description+'///'+traceBackText))
+
+      else:
+         rj = json.loads(response)
+         numPods=rj['NumPods']
+         print('num pods:',numPods)
+
+         m=sasapi.Measure(baseUrl,datetime.now(),'NUM_COMPUTE_PODS',str(numPods),'')
+         stats.handleMeasure(m)
 
 
+      print('\n -- SNM_PCT_USED')
       pgmUrl = 'https://raw.githubusercontent.com/marcoZav/opsMng/main/getSnmFileSystemPctUsed.sas'
 
-      response=restApi.runJobExecution(baseUrl,token,'%2FSNM%2Futility_jobs%2Fexec_pgm_from_url',"pgm_url=" + pgmUrl)
-      responseText=response.text
-      #print(responseText)
-      rj = json.loads(responseText)
-      snmPctUsed=rj['snm_pctUsed']
-      print('file system /snm pctused:',snmPctUsed)
+      out=restApi.runJobExecution(baseUrl,token,'%2FSNM%2Futility_jobs%2Fexec_pgm_from_url',"pgm_url=" + pgmUrl)
 
-      stats.handleMeasure(sasapi.Measure(baseUrl,datetime.now(),'SNM_PCT_USED',str(snmPctUsed),'') )
+      elapsed=out["elapsedMs"]
+      httpStatusCode=out["httpStatusCode"]
+      Description=out["Description"]
+      traceBackText=out['Traceback']
+      response=out["Response"]
+   
+      print("httpStatusCode", httpStatusCode)
+      print('Ms: ', elapsed)
+      print('*** runJobExecution response: *** \n '+response)
+
+      if ( httpStatusCode != 200):
+         print('Description',Description)
+         if (Description=='GENERIC_ERROR'):
+            print('Traceback',traceBackText)
+         stats.handleMeasure(sasapi.Measure(baseUrl,datetime.now(),'GET_SNM_PCT_USED_ERROR',str(httpStatusCode),response+'///'+Description+'///'+traceBackText))
+
+      else:
+         rj = json.loads(response)
+         snmPctUsed=rj['snm_pctUsed']
+         print('file system /snm pctused:',snmPctUsed)
+         stats.handleMeasure(sasapi.Measure(baseUrl,datetime.now(),'SNM_PCT_USED',str(snmPctUsed),'') )
+
+
+      
+
+     
 
 
       print('\n')

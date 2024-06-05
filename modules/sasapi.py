@@ -30,8 +30,14 @@ class Stats:
        self.logger=logger
       
    def handleMeasure(self,measure):
+
       defaultMsg=measure.environment + self.sep + measure.measureName + '=' + measure.measureValue + self.sep + measure.desc
+      
       match measure.measureName:
+         case 'GET_SNM_PCT_USED_ERROR':
+            self.logger.critical(defaultMsg)
+         case 'GET_NUM_COMPUTE_PODS_ERROR':
+            self.logger.critical(defaultMsg)
          case 'GET_JOBS_EMPTY':
             self.logger.error(defaultMsg)
          case 'CHECK_JOBS_HOURLY':
@@ -232,7 +238,14 @@ class RestApi:
       url = baseUrl + "/SASJobExecution/?_program=" + program
       if ( parms != '' ): 
          url = url + "&" + parms
-      print(url)
+      #print(url)
+
+      outDesc='Ko'
+      startDt=datetime.now()
+      endDt=datetime.now()
+      responseStatusCode=-1
+      responseText=''
+      traceBackText=''
 
       payload = {}
       headers = {
@@ -241,16 +254,33 @@ class RestApi:
          }
       try:
          response = requests.request("GET", url, headers=headers, data=payload, allow_redirects=True, timeout=90)
-         #print(response.text)
-         return response
+         responseStatusCode=response.status_code
+         responseText=response.text
+         endDt=datetime.now()
+
       except requests.exceptions.Timeout:
-         print("timeout")
-         return {'ERROR: Timeout'}
+         traceBackText=traceback.format_exception(*sys.exc_info())
+         outDesc='TIMEOUT'
+       
       except Exception as e:
          outDesc='GENERIC_ERROR'
          traceBackText=traceback.format_exception(*sys.exc_info())
-         print(traceBackText)
-         return {outDesc}
+         
+      elapsed=(endDt-startDt).microseconds/1000
+      #print('elapsed millisecondi: ', elapsed)
+      #print('response.status_code=', responseStatusCode)
+      if (responseStatusCode == 200): 
+          outDesc='Ok'
+
+      out={
+         "elapsedMs": elapsed,
+         "httpStatusCode": responseStatusCode,
+         "Response": responseText,
+         "Description": outDesc,
+         "Traceback": traceBackText
+         }
+
+      return out
    
 
    def getConfigurationDefinition(self,baseUrl,token,definitionItem):
