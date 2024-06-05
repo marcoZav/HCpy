@@ -72,8 +72,6 @@ class RestApi:
        
        self.logger=logger
 
-       self.emailFrom=
-
        config = configparser.ConfigParser()
        config.read(cfgFile)
 
@@ -231,6 +229,7 @@ class RestApi:
       url = baseUrl + "/SASJobExecution/?_program=" + program
       if ( parms != '' ): 
          url = url + "&" + parms
+      print(url)
 
       payload = {}
       headers = {
@@ -239,7 +238,7 @@ class RestApi:
          }
       try:
          response = requests.request("GET", url, headers=headers, data=payload, allow_redirects=True, timeout=90)
-         #print(response.text)
+         print(response.text)
          return response
       except requests.exceptions.Timeout:
          print("timeout")
@@ -337,6 +336,15 @@ class RestApi:
          
       return jobsdata
    
-   def sendMail(toList,subject,body):
-      program=''
-      self.runJobExecution(baseUrl,token,program,parms)
+   def sendMail(self,baseUrl,token, toList,subject,body):
+      
+      # todo - da mettere in file cfg
+      contentPathJobExRunPgm='%2FSNM%2Futility_jobs%2Fexec_pgm_from_url'
+
+      pgmUrl = 'https://raw.githubusercontent.com/marcoZav/HCpy/main/jobex/sendMail.sas'
+
+      parms='parms=toList:' + toList + '|sender:'+ self.emailsFrom + '|subject:'+ subject +'|body:' + body
+      print(parms)
+
+      resp=self.runJobExecution(baseUrl,token,contentPathJobExRunPgm,"pgm_url=" + pgmUrl + '&'+ parms)
+      print(resp)

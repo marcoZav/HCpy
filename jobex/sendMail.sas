@@ -6,13 +6,13 @@ toList
 subject
 body
 
-parms=toList:aaa.bbb@xx.com;ccc.ddd@yy.com|subject:testmail|body:corpo
+parms=toList:aaa.bbb@xx.com;ccc.ddd@yy.com|from:fff.ggg@zz.com|subject:testmail|body:corpo
 
 
 debug:
 
 data _null_;
-call symput ('parms','toList:aaa.bbb@xx.com;ccc.ddd@yy.com|subject:testmail|body:corpo');
+call symput ('parms','toList:aaa.bbb@xx.com;ccc.ddd@yy.com|sender:fff.ggg@zz.com|subject:testmail|body:corpo');
 run;
 
 
@@ -43,21 +43,13 @@ run;
 
 filename msg email 
  to="&toList."
- from="replies-disabled@cloud-SAS.com"
+ from="&sender."
  subject = "&subject.";
 
 data _null_;
  file msg;
  put "&body.";
 run;
-
-
-%if (%syscc ge 4) %then %do;
-    %let retc=KO;
-    %let retMsg=&syserrortext;
-%end;
-
-
 
 
 data _null_;

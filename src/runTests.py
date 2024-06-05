@@ -52,6 +52,9 @@ logging.basicConfig(
 
 restApi=sasapi.RestApi(logger,cfgFile)
 
+# todo - da mettere in file cfg
+contentPathJobExRunPgm='%2FSNM%2Futility_jobs%2Fexec_pgm_from_url'
+
 
 
 batchJobsNumber2test=2
@@ -128,6 +131,11 @@ if ( httpStatusCode != 200 ):
 
 #print(token)
 print('TOKEN ' + datetime.now().strftime("%m/%d/%Y, %H:%M:%S") + ' ----------------------------')
+
+print('\n')
+print('sendmail')
+ret=restApi.sendMail(baseUrl,token,'marco.zavarini@sas.com','test','testbody')
+print(ret)
 
 
 print('\n')
@@ -390,7 +398,9 @@ pgmUrl = 'https://raw.githubusercontent.com/marcoZav/test01/master/Program1.sas'
 pgmUrl = 'https://raw.githubusercontent.com/marcoZav/opsMng/main/getComputePods.sas'
 #pgmUrl = 'https://raw.githubusercontent.com/marcoZav/opsMng/main/getPodByName.sas&parms=sas-compute-server-0accbd2e-1485-46c9-99c4-1c8e883e5614-35387';
 
-response=restApi.runJobExecution(baseUrl,token,'%2FSNM%2Futility_jobs%2Fexec_pgm_from_url',"pgm_url=" + pgmUrl)
+
+
+response=restApi.runJobExecution(baseUrl,token,contentPathJobExRunPgm,"pgm_url=" + pgmUrl)
 print(response.text)
 
 print('END ' + datetime.now().strftime("%m/%d/%Y, %H:%M:%S") + '----------------------------------------------------------------------------------------------')
