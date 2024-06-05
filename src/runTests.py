@@ -120,8 +120,9 @@ while ( ( iter <= maxIter ) & ( endWhile == False ) ):
       print('Description',Description)
       if (Description=='GENERIC_ERROR'):
          print('Traceback',traceBackText)
+      
+      sleep(5*iter)
       iter=iter+1
-      sleep(5)
    else:
       endWhile=True
 
@@ -134,7 +135,14 @@ print('TOKEN ' + datetime.now().strftime("%m/%d/%Y, %H:%M:%S") + ' -------------
 
 print('\n')
 print('sendmail')
-ret=restApi.sendMail(baseUrl,token,'marco.zavarini@sas.com','test','testbody')
+
+# FORMATO DA PASSARE PER INDIRIZZI MULTIPLI - da testare non dà errore ma non mi pare funzionare
+#ret=restApi.sendMail(baseUrl,token,'("marco.zavarini@sas.com" "marco.zavarini@sas.com")','test','testbody')
+
+
+# \n va a capo correttamente
+#ret=restApi.sendMail(baseUrl,token,'marco.zavarini@sas.com','test','testbody \n ciao3')
+
 print(ret)
 
 

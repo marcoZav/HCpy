@@ -339,12 +339,14 @@ class RestApi:
    def sendMail(self,baseUrl,token, toList,subject,body):
       
       # todo - da mettere in file cfg
+      # exec_pgm_from_url ha come parametri: pgm_url=, parms=
       contentPathJobExRunPgm='%2FSNM%2Futility_jobs%2Fexec_pgm_from_url'
+
 
       pgmUrl = 'https://raw.githubusercontent.com/marcoZav/HCpy/main/jobex/sendMail.sas'
 
-      parms='parms=toList:' + toList + '|sender:'+ self.emailsFrom + '|subject:'+ subject +'|body:' + body
+      parms='toList:' + toList + '|sender:'+ self.emailsFrom + '|subject:'+ subject +'|body:' + body
       print(parms)
 
-      resp=self.runJobExecution(baseUrl,token,contentPathJobExRunPgm,"pgm_url=" + pgmUrl + '&'+ parms)
+      resp=self.runJobExecution(baseUrl,token,contentPathJobExRunPgm,"pgm_url=" + pgmUrl + '&parms='+ parms)
       print(resp)
