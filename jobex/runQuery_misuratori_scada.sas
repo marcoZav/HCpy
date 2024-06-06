@@ -34,7 +34,7 @@ WHERE  (  "DATA_ORA_RIF" >= &dtQuery);
 
 %let nrecords=-1;
 proc sql noprint;
-select count(*) into: nrecords  from  START ;
+select count(*) into: nrecords  from  STAT ;
 quit;
 
 
