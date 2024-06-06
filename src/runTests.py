@@ -68,15 +68,19 @@ batchJobsNumber2test=4
 nHoursPastJobs=48
 baseUrl = 'https://snamprodmp.ondemand.sas.com'
 
-batchJobsNumber2test=1
-numberOfMinutesDelay4error=3
-nHoursPastJobs=72
-baseUrl = 'https://snamtest.ondemand.sas.com'
-
 numberOfMinutesDelay4error=0
 batchJobsNumber2test=2
 nHoursPastJobs=72
 baseUrl = 'https://snamprodgerjob.ondemand.sas.com'   
+
+# test è stato restartato il 4 giugno 
+# oltre ai non partiti, vedere i failed, da cui si vedono le http error, di cui pare esserci tuning
+batchJobsNumber2test=1
+numberOfMinutesDelay4error=3
+nHoursPastJobs=200
+baseUrl = 'https://snamtest.ondemand.sas.com'
+
+
 
 
 
