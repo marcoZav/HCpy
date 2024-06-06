@@ -14,6 +14,8 @@ import sys
 import logging
 import configparser
 
+import pandas as pd
+
 
 class Measure:
    def __init__(self, environment, timestamp, measureName, measureValue, desc):
@@ -28,9 +30,44 @@ class Stats:
    sep=';'
    def __init__(self,logger):
        self.logger=logger
+
+       self.dfEvents = pd.DataFrame({
+         'event_timestamp': []
+         ,'event_name': []
+         ,'event_severity': []
+         ,'event_details':[]
+       })
+
+       self.dfMeasures = pd.DataFrame({
+         'measure_timestamp': []
+         ,'measure_name':[]
+         ,'measure_environment':[]
+         ,'measure_value':[]
+         ,'measure_desc':[]
+       })
+
       
    def handleMeasure(self,measure):
 
+      # dictionary with the data for the new row
+      newMeasure = {
+        'measure_timestamp': datetime.now(dt.UTC)
+        ,'measure_name': measure.measureName
+        ,'measure_environment': measure.environment
+        ,'measure_value': measure.measureValue
+        ,'measure_desc': measure.desc
+        }
+      
+      # Append the dictionary to the DataFrame
+      self.dfMeasures.loc[len(self.dfMeasures)] = newMeasure
+      # Reset the index
+      self.dfMeasures = self.dfMeasures.reset_index(drop=True)
+
+      pd.set_option('display.max_rows', None)
+      #pandas.set_option('display.max_columns', None)
+      pd.set_option('display.max_colwidth', None)
+      print('dfMeasures',self.dfMeasures)
+     
       defaultMsg=measure.environment + self.sep + measure.measureName + '=' + measure.measureValue + self.sep + measure.desc
       
       match measure.measureName:

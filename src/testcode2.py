@@ -1,25 +1,53 @@
 
+
 from datetime import datetime
 from datetime import date, timedelta
 
 #per prendere datetime.UTC
-import datetime as dt   
-
-dateStart = date.today() - timedelta(hours=24)
-print('Current Date :', date.today())
-print(' dateStart :', dateStart) 
-
-url =  "/jobExecution/jobs?start=0&limit=4000&sortBy=creationTimeStamp:ascending&filter=and(ge(creationTimeStamp,%27" + dateStart.strftime("%Y-%m-%d") + "T00:00:00.000Z%27))"
-print (url)
+import datetime as dt    
 
 
+import pandas as pd
 
-dtNow=datetime.now(dt.UTC)
-print(dtNow)
-dtStart = dtNow - timedelta(hours=24)
-print(dtStart)
 
-print(      )
+dfEvents = pd.DataFrame({
+     'event_timestamp': []
+    ,'event_name': []
+    ,'event_severity': []
+    ,'event_details':[]
+})
 
-url =  "/jobExecution/jobs?start=0&limit=4000&sortBy=creationTimeStamp:ascending&filter=and(ge(creationTimeStamp,%27" + dtStart.strftime("%Y-%m-%dT%H:%M:%S.000Z") + "%27))"
-print (url)
+dfMeasures = pd.DataFrame({
+     'measure_timestamp': []
+    ,'measure_name':[]
+    ,'measure_environment':[]
+    ,'measure_value':[]
+    ,'measure_desc':[]
+})
+
+'''
+# dictionary with the data for the new row
+newMeasure = {
+     'measure_timestamp': datetime.now(dt.UTC)
+    ,'measure_name': measure.measureName
+    ,'measure_environment': measure.environment
+    ,'measure_value': measure.measureValue
+    ,'measure_desc': measure.desc
+    }
+'''
+
+newMeasure = {
+     'measure_timestamp': datetime.now(dt.UTC)
+    ,'measure_name': 'measureName'
+    ,'measure_environment': 'environment'
+    ,'measure_value': 'measureValue'
+    ,'measure_desc': 'desc'
+    }
+
+# Append the dictionary to the DataFrame
+dfMeasures.loc[len(dfMeasures)] = newMeasure
+# Reset the index
+dfMeasures = dfMeasures.reset_index(drop=True)
+
+print('dfMeasures',dfMeasures)
+print('dfEvents',dfEvents)
