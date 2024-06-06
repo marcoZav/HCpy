@@ -34,6 +34,8 @@ class Stats:
       defaultMsg=measure.environment + self.sep + measure.measureName + '=' + measure.measureValue + self.sep + measure.desc
       
       match measure.measureName:
+         case 'QUERY_MISURATORI_SCADA_ERROR':
+            self.logger.critical(defaultMsg)
          case 'GET_SNM_PCT_USED_ERROR':
             self.logger.critical(defaultMsg)
          case 'GET_NUM_COMPUTE_PODS_ERROR':
@@ -61,6 +63,13 @@ class Stats:
                self.logger.error(defaultMsg)
             elif int(measure.measureValue) >= 200:
                self.logger.critical(defaultMsg)
+         case 'QUERY_MISURATORI_SCADA_COUNT':
+            if int(measure.measureValue) <= 10:
+               self.logger.error(defaultMsg)
+            elif int(measure.measureValue) > 10 and int(measure.measureValue) < 5000:
+               self.logger.warning(defaultMsg)
+            elif int(measure.measureValue) >= 5000:
+               self.logger.info(defaultMsg)     
          case "GET_TOKEN_ERROR":
             self.logger.critical(defaultMsg)
          case "GET_TOKEN_ELAPSED":
