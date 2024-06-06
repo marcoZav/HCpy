@@ -126,7 +126,7 @@ for baseUrl in baseUrls:
 
       # ---------------------------------------------------------------------------------------------------------------------------------
       print('\n -- NUM_COMPUTE_PODS')
-      pgmUrl = 'https://raw.githubusercontent.com/marcoZav/opsMng/main/getComputePodsNumber.sas'
+      pgmUrl = 'https://raw.githubusercontent.com/marcoZav/HCpy/main/jobex/getComputePodsNumber.sas'
 
       out=restApi.runJobExecution(baseUrl,token,'%2FSNM%2Futility_jobs%2Fexec_pgm_from_url',"pgm_url=" + pgmUrl)
 
@@ -157,7 +157,7 @@ for baseUrl in baseUrls:
 
       # ---------------------------------------------------------------------------------------------------------------------------------
       print('\n -- SNM_PCT_USED')
-      pgmUrl = 'https://raw.githubusercontent.com/marcoZav/opsMng/main/getSnmFileSystemPctUsed.sas'
+      pgmUrl = 'https://raw.githubusercontent.com/marcoZav/HCpy/main/jobex/getSnmFileSystemPctUsed.sas'
 
       out=restApi.runJobExecution(baseUrl,token,'%2FSNM%2Futility_jobs%2Fexec_pgm_from_url',"pgm_url=" + pgmUrl)
 
@@ -185,8 +185,8 @@ for baseUrl in baseUrls:
 
 
       # ---------------------------------------------------------------------------------------------------------------------------------
-      print('\n -- SNM_PCT_USED')
-      pgmUrl = 'https://raw.githubusercontent.com/marcoZav/opsMng/main/getSnmFileSystemPctUsed.sas'
+      print('\n -- QUERY_MISURATORI_SCADA')
+      pgmUrl = 'https://raw.githubusercontent.com/marcoZav/HCpy/main/jobex/getSnmFileSystemPctUsed.sas'
 
       out=restApi.runJobExecution(baseUrl,token,'%2FSNM%2Futility_jobs%2Fexec_pgm_from_url',"pgm_url=" + pgmUrl)
 
