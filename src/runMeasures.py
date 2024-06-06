@@ -211,6 +211,7 @@ for baseUrl in baseUrls:
          RecordCount=rj['RecordCount']
          print('query - count:',RecordCount)
          stats.handleMeasure(sasapi.Measure(baseUrl,datetime.now(),'QUERY_MISURATORI_SCADA_COUNT',str(RecordCount),'') )
+         stats.handleMeasure(sasapi.Measure(baseUrl,datetime.now(),'QUERY_MISURATORI_SCADA_ELAPSED',str(elapsed),'') )
 
      
 
