@@ -204,13 +204,13 @@ for baseUrl in baseUrls:
          print('Description',Description)
          if (Description=='GENERIC_ERROR'):
             print('Traceback',traceBackText)
-         stats.handleMeasure(sasapi.Measure(baseUrl,datetime.now(),'GET_SNM_PCT_USED_ERROR',str(httpStatusCode),response+'///'+Description+'///'+traceBackText))
+         stats.handleMeasure(sasapi.Measure(baseUrl,datetime.now(),'QUERY_MISURATORI_SCADA_ERROR',str(httpStatusCode),response+'///'+Description+'///'+traceBackText))
 
       else:
          rj = json.loads(response)
-         snmPctUsed=rj['snm_pctUsed']
-         print('file system /snm pctused:',snmPctUsed)
-         stats.handleMeasure(sasapi.Measure(baseUrl,datetime.now(),'SNM_PCT_USED',str(snmPctUsed),'') )
+         RecordCount=rj['RecordCount']
+         print('query - count:',RecordCount)
+         stats.handleMeasure(sasapi.Measure(baseUrl,datetime.now(),'QUERY_MISURATORI_SCADA_COUNT',str(RecordCount),'') )
 
      
 
