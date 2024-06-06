@@ -28,13 +28,18 @@ WHERE  (  "DATA_ORA_RIF" >= &dtQuery);
 
 
 
-%db_passthrough(sql_query=&sql_query
-                     , outtable=stat
+%db_passthrough(sql_query=%nrbquote(&sql_query)
+                     , outtable=STAT
                      );
+
+%let nrecords=-1;
+proc sql noprint;
+select count(*) into: nrecords  from  START ;
+quit;
 
 
 data _null_;
 file _webout;
-num=compress(symget('numPods'));
+num=compress(symget('nrecords'));
 put '{ "NumPods":' 77777 '}' ;
 run;
