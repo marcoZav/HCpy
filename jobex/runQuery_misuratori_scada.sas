@@ -41,5 +41,5 @@ quit;
 data _null_;
 file _webout;
 num=compress(symget('nrecords'));
-put '{ "NumPods":' 77777 '}' ;
+put '{ "NumPods":' num '}' ;
 run;
