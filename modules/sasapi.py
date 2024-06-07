@@ -31,6 +31,7 @@ class Stats:
    def __init__(self,logger):
        self.logger=logger
 
+       # questi possono servire soprattutto se la classe viene usata continuativamente e non istanziata ogni volta
        self.dfEvents = pd.DataFrame({
          'event_timestamp': []
          ,'event_name': []
@@ -66,7 +67,7 @@ class Stats:
       pd.set_option('display.max_rows', None)
       #pandas.set_option('display.max_columns', None)
       pd.set_option('display.max_colwidth', None)
-      print('dfMeasures',self.dfMeasures)
+      #print('dfMeasures',self.dfMeasures)
      
       defaultMsg=measure.environment + self.sep + measure.measureName + '=' + measure.measureValue + self.sep + measure.desc
       
