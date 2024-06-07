@@ -69,6 +69,17 @@ baseUrls = [
 # debug
 #baseUrls = ['https://snamprodgerjob.ondemand.sas.com' ]
 
+
+fullTestList=['NUM_COMPUTE_PODS','SNM_PCT_USED','QUERY_MISURATORI_SCADA','CHECK_JOBS']
+
+
+envTests={
+    'https://snamtest.ondemand.sas.com': ['NUM_COMPUTE_PODS','SNM_PCT_USED','CHECK_JOBS']
+   ,'https://snamprodmp.ondemand.sas.com': fullTestList
+   ,'https://snamprodukjob.ondemand.sas.com':  ['NUM_COMPUTE_PODS','SNM_PCT_USED','CHECK_JOBS']
+   ,'https://snamprodgerjob.ondemand.sas.com':  ['NUM_COMPUTE_PODS','SNM_PCT_USED','CHECK_JOBS']
+}
+
 # -----------------------------------------------------------------------------------------------------------------
 
 print('START ' + datetime.now().strftime("%m/%d/%Y, %H:%M:%S") + ' ----------------------------------------------------------------------------------------------')
@@ -78,6 +89,9 @@ stats=sasapi.Stats(logger)
 
 for baseUrl in baseUrls:
    print (baseUrl)
+
+   testList=envTests[baseUrl]
+
    print('-- Get Token:')
        
    maxIter=5
@@ -126,245 +140,254 @@ for baseUrl in baseUrls:
 
       # ---------------------------------------------------------------------------------------------------------------------------------
       print('\n -- NUM_COMPUTE_PODS')
-      pgmUrl = 'https://raw.githubusercontent.com/marcoZav/HCpy/main/jobex/getComputePodsNumber.sas'
+      if ('NUM_COMPUTE_PODS' in testList):
+         pgmUrl = 'https://raw.githubusercontent.com/marcoZav/HCpy/main/jobex/getComputePodsNumber.sas'
 
-      out=restApi.runJobExecution(baseUrl,token,restApi.jobexec_pgm_from_url,"pgm_url=" + pgmUrl)
+         out=restApi.runJobExecution(baseUrl,token,restApi.jobexec_pgm_from_url,"pgm_url=" + pgmUrl)
 
-      elapsed=out["elapsedMs"]
-      httpStatusCode=out["httpStatusCode"]
-      Description=out["Description"]
-      traceBackText=out['Traceback']
-      response=out["Response"]
-   
-      print("httpStatusCode", httpStatusCode)
-      print('Ms: ', elapsed)
-      print('*** runJobExecution response: *** \n '+response)
+         elapsed=out["elapsedMs"]
+         httpStatusCode=out["httpStatusCode"]
+         Description=out["Description"]
+         traceBackText=out['Traceback']
+         response=out["Response"]
+      
+         print("httpStatusCode", httpStatusCode)
+         print('Ms: ', elapsed)
+         print('*** runJobExecution response: *** \n '+response)
 
-      if ( httpStatusCode != 200):
-         print('Description',Description)
-         if (Description=='GENERIC_ERROR'):
-            print('Traceback',traceBackText)
-         stats.handleMeasure(sasapi.Measure(baseUrl,datetime.now(),'GET_NUM_COMPUTE_PODS_ERROR',str(httpStatusCode),response+'///'+Description+'///'+traceBackText))
+         if ( httpStatusCode != 200):
+            print('Description',Description)
+            if (Description=='GENERIC_ERROR'):
+               print('Traceback',traceBackText)
+            stats.handleMeasure(sasapi.Measure(baseUrl,datetime.now(),'GET_NUM_COMPUTE_PODS_ERROR',str(httpStatusCode),response+'///'+Description+'///'+traceBackText))
 
+         else:
+            rj = json.loads(response)
+            numPods=rj['NumPods']
+            print('num pods:',numPods)
+
+            m=sasapi.Measure(baseUrl,datetime.now(),'NUM_COMPUTE_PODS',str(numPods),'')
+            stats.handleMeasure(m)
       else:
-         rj = json.loads(response)
-         numPods=rj['NumPods']
-         print('num pods:',numPods)
-
-         m=sasapi.Measure(baseUrl,datetime.now(),'NUM_COMPUTE_PODS',str(numPods),'')
-         stats.handleMeasure(m)
+         print('skipped')
 
 
       # ---------------------------------------------------------------------------------------------------------------------------------
       print('\n -- SNM_PCT_USED')
-      pgmUrl = 'https://raw.githubusercontent.com/marcoZav/HCpy/main/jobex/getSnmFileSystemPctUsed.sas'
+      if ('SNM_PCT_USED' in testList):
+         pgmUrl = 'https://raw.githubusercontent.com/marcoZav/HCpy/main/jobex/getSnmFileSystemPctUsed.sas'
 
-      out=restApi.runJobExecution(baseUrl,token,restApi.jobexec_pgm_from_url,"pgm_url=" + pgmUrl)
+         out=restApi.runJobExecution(baseUrl,token,restApi.jobexec_pgm_from_url,"pgm_url=" + pgmUrl)
 
-      elapsed=out["elapsedMs"]
-      httpStatusCode=out["httpStatusCode"]
-      Description=out["Description"]
-      traceBackText=out['Traceback']
-      response=out["Response"]
-   
-      print("httpStatusCode", httpStatusCode)
-      print('Ms: ', elapsed)
-      print('*** runJobExecution response: *** \n '+response)
+         elapsed=out["elapsedMs"]
+         httpStatusCode=out["httpStatusCode"]
+         Description=out["Description"]
+         traceBackText=out['Traceback']
+         response=out["Response"]
+      
+         print("httpStatusCode", httpStatusCode)
+         print('Ms: ', elapsed)
+         print('*** runJobExecution response: *** \n '+response)
 
-      if ( httpStatusCode != 200):
-         print('Description',Description)
-         if (Description=='GENERIC_ERROR'):
-            print('Traceback',traceBackText)
-         stats.handleMeasure(sasapi.Measure(baseUrl,datetime.now(),'GET_SNM_PCT_USED_ERROR',str(httpStatusCode),response+'///'+Description+'///'+traceBackText))
+         if ( httpStatusCode != 200):
+            print('Description',Description)
+            if (Description=='GENERIC_ERROR'):
+               print('Traceback',traceBackText)
+            stats.handleMeasure(sasapi.Measure(baseUrl,datetime.now(),'GET_SNM_PCT_USED_ERROR',str(httpStatusCode),response+'///'+Description+'///'+traceBackText))
 
+         else:
+            rj = json.loads(response)
+            snmPctUsed=rj['snm_pctUsed']
+            print('file system /snm pctused:',snmPctUsed)
+            stats.handleMeasure(sasapi.Measure(baseUrl,datetime.now(),'SNM_PCT_USED',str(snmPctUsed),'') )
       else:
-         rj = json.loads(response)
-         snmPctUsed=rj['snm_pctUsed']
-         print('file system /snm pctused:',snmPctUsed)
-         stats.handleMeasure(sasapi.Measure(baseUrl,datetime.now(),'SNM_PCT_USED',str(snmPctUsed),'') )
-
+         print('skipped')
 
       # ---------------------------------------------------------------------------------------------------------------------------------
       print('\n -- QUERY_MISURATORI_SCADA')
-      pgmUrl = 'https://raw.githubusercontent.com/marcoZav/HCpy/main/jobex/runQuery_misuratori_scada.sas'
+      if ('QUERY_MISURATORI_SCADA' in testList):
+         pgmUrl = 'https://raw.githubusercontent.com/marcoZav/HCpy/main/jobex/runQuery_misuratori_scada.sas'
 
-      out=restApi.runJobExecution(baseUrl,token,restApi.jobexec_pgm_from_url,"pgm_url=" + pgmUrl)
+         out=restApi.runJobExecution(baseUrl,token,restApi.jobexec_pgm_from_url,"pgm_url=" + pgmUrl)
 
-      elapsed=out["elapsedMs"]
-      httpStatusCode=out["httpStatusCode"]
-      Description=out["Description"]
-      traceBackText=out['Traceback']
-      response=out["Response"]
-   
-      print("httpStatusCode", httpStatusCode)
-      print('Ms: ', elapsed)
-      print('*** runJobExecution response: *** \n '+response)
+         elapsed=out["elapsedMs"]
+         httpStatusCode=out["httpStatusCode"]
+         Description=out["Description"]
+         traceBackText=out['Traceback']
+         response=out["Response"]
+      
+         print("httpStatusCode", httpStatusCode)
+         print('Ms: ', elapsed)
+         print('*** runJobExecution response: *** \n '+response)
 
-      if ( httpStatusCode != 200):
-         print('Description',Description)
-         if (Description=='GENERIC_ERROR'):
-            print('Traceback',traceBackText)
-         stats.handleMeasure(sasapi.Measure(baseUrl,datetime.now(),'QUERY_MISURATORI_SCADA_ERROR',str(httpStatusCode),response+'///'+Description+'///'+traceBackText))
+         if ( httpStatusCode != 200):
+            print('Description',Description)
+            if (Description=='GENERIC_ERROR'):
+               print('Traceback',traceBackText)
+            stats.handleMeasure(sasapi.Measure(baseUrl,datetime.now(),'QUERY_MISURATORI_SCADA_ERROR',str(httpStatusCode),response+'///'+Description+'///'+traceBackText))
 
+         else:
+            rj = json.loads(response)
+            RecordCount=rj['RecordCount']
+            print('query - count:',RecordCount)
+            stats.handleMeasure(sasapi.Measure(baseUrl,datetime.now(),'QUERY_MISURATORI_SCADA_COUNT',str(RecordCount),'') )
+            stats.handleMeasure(sasapi.Measure(baseUrl,datetime.now(),'QUERY_MISURATORI_SCADA_ELAPSED',str(elapsed),'') )
       else:
-         rj = json.loads(response)
-         RecordCount=rj['RecordCount']
-         print('query - count:',RecordCount)
-         stats.handleMeasure(sasapi.Measure(baseUrl,datetime.now(),'QUERY_MISURATORI_SCADA_COUNT',str(RecordCount),'') )
-         stats.handleMeasure(sasapi.Measure(baseUrl,datetime.now(),'QUERY_MISURATORI_SCADA_ELAPSED',str(elapsed),'') )
-
+         print('skipped')
      
 
 
       print('\n')
       print('-- GET Jobs')
+      if ('CHECK_JOBS' not in testList):
+         print('skipped')
+      else:
+         maxIter=2
+         iter=1
+         endWhile=False
 
-      maxIter=2
-      iter=1
-      endWhile=False
+         nHoursPastJobs=1
 
-      nHoursPastJobs=1
+         if (   baseUrl == 'https://snamprodgerjob.ondemand.sas.com' 
+               or baseUrl == 'https://snamprodukjob.ondemand.sas.com'
+               or baseUrl == 'https://snamprodmp.ondemand.sas.com'
+               or baseUrl == 'https://snamtest.ondemand.sas.com'
+            ):
+            
+            if baseUrl == 'https://snamprodgerjob.ondemand.sas.com':
+               numberOfMinutesDelay4error=0
+               batchJobsNumber2test=0
+            if baseUrl == 'https://snamprodukjob.ondemand.sas.com':
+               numberOfMinutesDelay4error=43
+               batchJobsNumber2test=0
+            if baseUrl == 'https://snamprodmp.ondemand.sas.com':
+               numberOfMinutesDelay4error=0
+               batchJobsNumber2test=2
+            if baseUrl == 'https://snamtest.ondemand.sas.com':
+               numberOfMinutesDelay4error=0
+               batchJobsNumber2test=1
 
-      if (   baseUrl == 'https://snamprodgerjob.ondemand.sas.com' 
-            or baseUrl == 'https://snamprodukjob.ondemand.sas.com'
-            or baseUrl == 'https://snamprodmp.ondemand.sas.com'
-            or baseUrl == 'https://snamtest.ondemand.sas.com'
-           ):
-         
-         if baseUrl == 'https://snamprodgerjob.ondemand.sas.com':
-            numberOfMinutesDelay4error=0
-            batchJobsNumber2test=0
-         if baseUrl == 'https://snamprodukjob.ondemand.sas.com':
-            numberOfMinutesDelay4error=43
-            batchJobsNumber2test=0
-         if baseUrl == 'https://snamprodmp.ondemand.sas.com':
-            numberOfMinutesDelay4error=0
-            batchJobsNumber2test=2
-         if baseUrl == 'https://snamtest.ondemand.sas.com':
-            numberOfMinutesDelay4error=0
-            batchJobsNumber2test=1
-
-         while ( ( iter <= maxIter ) & ( endWhile == False ) ):
-            # terzo parametro, numero di ore indietro
-            items=restApi.getJobs(baseUrl,token,nHoursPastJobs)
-            #print(items)
-            if ( len(items) == 0 ):
-               print('ELENCO JOBS RESTITUITO HA ZERO ELEMENTI. Iter=', iter)
-               iter=iter+1
-               sleep(5)
-            else:
-               endWhile=True
-         
-            if ( len(items) == 0 ):
-               print('ELENCO JOBS RESTITUITO HA ZERO ELEMENTI')
-               stats.handleMeasure(sasapi.Measure(baseUrl,datetime.now(),'GET_JOBS_EMPTY','0','ELENCO JOBS RESTITUITO HA ZERO ELEMENTI'))
-            else:
-               jobsdata=restApi.buildJobsDataTable(items)     
-               
-               #check se ci sono job del tipo filtrato sopra
-               n=len(jobsdata) 
-               if n==0:
-                  print ('Nessun Job presente del tipo selezionato in jobsubmittedByApplication')
-                  # todo - da gestire se info, critical ecc.
-                  stats.handleMeasure(sasapi.Measure(baseUrl,datetime.now(),'GET_JOBS_NOTFOUND','0','Nessun Job presente del tipo selezionato in jobsubmittedByApplication'))
-               else:  
-                  dfJobs=pandas.DataFrame(jobsdata)
-                  pandas.set_option('display.max_rows', None)
-                  #pandas.set_option('display.max_columns', None)
-                  pandas.set_option('display.max_colwidth', None)
-                  print('\n')
-                  dfJobs.sort_values(by=['giorno','oraZ','jobName'], ascending=True)
-                  print('dfJobs - tutti quelli estratti per data e tipologia')
-                  print(dfJobs)
+            while ( ( iter <= maxIter ) & ( endWhile == False ) ):
+               # terzo parametro, numero di ore indietro
+               items=restApi.getJobs(baseUrl,token,nHoursPastJobs)
+               #print(items)
+               if ( len(items) == 0 ):
+                  print('ELENCO JOBS RESTITUITO HA ZERO ELEMENTI. Iter=', iter)
+                  iter=iter+1
+                  sleep(5)
+               else:
+                  endWhile=True
+            
+               if ( len(items) == 0 ):
+                  print('ELENCO JOBS RESTITUITO HA ZERO ELEMENTI')
+                  stats.handleMeasure(sasapi.Measure(baseUrl,datetime.now(),'GET_JOBS_EMPTY','0','ELENCO JOBS RESTITUITO HA ZERO ELEMENTI'))
+               else:
+                  jobsdata=restApi.buildJobsDataTable(items)     
                   
-                  # UTC/GMT time
-                  dt_utcnow = datetime.now(dt.UTC)
-                  print('UTC time:',dt_utcnow)
-                  print(dt_utcnow.date(),dt_utcnow.hour, dt_utcnow.minute)
-                  
-                  dfJobsCurrentHour=dfJobs.loc[ ( dfJobs['oraZ'] == str(dt_utcnow.hour).zfill(2) )  & ( dfJobs['giorno'] == str(dt_utcnow.date()) ) ]
-                  
-
-                  print('Dettaglio Jobs di questa ORA:')
-                  print(dfJobsCurrentHour)
-
-                  dfJobsSummary=dfJobs.groupby(['giorno','oraZ'], as_index = False).agg(
-                     {
-                        'minuto': ['min', 'max'], 
-                        'jobId': 'count',
-                        'jobName': ' '.join,
-                        'jobState': ' '.join
-                        })
-                  print('\n')
-                  
-                  dfJobsSummaryCurrentHour=dfJobsSummary.loc[ ( dfJobsSummary['oraZ'] == str(dt_utcnow.hour).zfill(2) ) & ( dfJobs['giorno'] == str(dt_utcnow.date()) ) ]
-                           
-                  # debug
-                  #dfJobsSummaryCurrentHour=dfJobsSummary.loc[ ( dfJobsSummary['oraZ'] == '99' ) ]
-
-
-                  print('Summary Jobs di questa ORA:')
-                  print(dfJobsSummaryCurrentHour)
-
-                  if ( len(dfJobsSummaryCurrentHour.index) == 0 ):
-                     print ('FAIL - nessuno partito')
-                     # nessun Job partito
-                     stats.handleMeasure(sasapi.Measure(baseUrl,datetime.now(),'CHECK_JOBS_HOURLY',str(dt_utcnow.hour),'NESSUNO_PARTITO'))
-                  else:
-                     # questi controlli vanno se esiste almeno una riga
-                     dfJobsAlertCurrentHour=dfJobsSummaryCurrentHour.loc[
-                        ( dfJobsSummaryCurrentHour[('jobId', 'count')] < batchJobsNumber2test )
-                        |  ( dfJobsSummaryCurrentHour[('minuto', 'max')] > numberOfMinutesDelay4error) 
-                        |  ( dfJobsSummaryCurrentHour[('jobState', 'join')].str.contains('failed') ) 
-                        ]
+                  #check se ci sono job del tipo filtrato sopra
+                  n=len(jobsdata) 
+                  if n==0:
+                     print ('Nessun Job presente del tipo selezionato in jobsubmittedByApplication')
+                     # todo - da gestire se info, critical ecc.
+                     stats.handleMeasure(sasapi.Measure(baseUrl,datetime.now(),'GET_JOBS_NOTFOUND','0','Nessun Job presente del tipo selezionato in jobsubmittedByApplication'))
+                  else:  
+                     dfJobs=pandas.DataFrame(jobsdata)
+                     pandas.set_option('display.max_rows', None)
+                     #pandas.set_option('display.max_columns', None)
+                     pandas.set_option('display.max_colwidth', None)
                      print('\n')
-                     print('dfJobsAlertCurrentHour:')
-                     print(dfJobsAlertCurrentHour)
-                     if len(dfJobsAlertCurrentHour.index) == 0:
-                        stats.handleMeasure(sasapi.Measure(baseUrl,datetime.now(),'CHECK_JOBS_HOURLY',str(dt_utcnow.hour),'OK'))
-                        print ('PASS')
+                     dfJobs.sort_values(by=['giorno','oraZ','jobName'], ascending=True)
+                     print('dfJobs - tutti quelli estratti per data e tipologia')
+                     print(dfJobs)
+                     
+                     # UTC/GMT time
+                     dt_utcnow = datetime.now(dt.UTC)
+                     print('UTC time:',dt_utcnow)
+                     print(dt_utcnow.date(),dt_utcnow.hour, dt_utcnow.minute)
+                     
+                     dfJobsCurrentHour=dfJobs.loc[ ( dfJobs['oraZ'] == str(dt_utcnow.hour).zfill(2) )  & ( dfJobs['giorno'] == str(dt_utcnow.date()) ) ]
+                     
+
+                     print('Dettaglio Jobs di questa ORA:')
+                     print(dfJobsCurrentHour)
+
+                     dfJobsSummary=dfJobs.groupby(['giorno','oraZ'], as_index = False).agg(
+                        {
+                           'minuto': ['min', 'max'], 
+                           'jobId': 'count',
+                           'jobName': ' '.join,
+                           'jobState': ' '.join
+                           })
+                     print('\n')
+                     
+                     dfJobsSummaryCurrentHour=dfJobsSummary.loc[ ( dfJobsSummary['oraZ'] == str(dt_utcnow.hour).zfill(2) ) & ( dfJobs['giorno'] == str(dt_utcnow.date()) ) ]
+                              
+                     # debug
+                     #dfJobsSummaryCurrentHour=dfJobsSummary.loc[ ( dfJobsSummary['oraZ'] == '99' ) ]
+
+
+                     print('Summary Jobs di questa ORA:')
+                     print(dfJobsSummaryCurrentHour)
+
+                     if ( len(dfJobsSummaryCurrentHour.index) == 0 ):
+                        print ('FAIL - nessuno partito')
+                        # nessun Job partito
+                        stats.handleMeasure(sasapi.Measure(baseUrl,datetime.now(),'CHECK_JOBS_HOURLY',str(dt_utcnow.hour),'NESSUNO_PARTITO'))
                      else:
-                        print ('FAIL')
-                        print ('\n')
-                        print ('Details:')
-                        
-                        dfJobsAlertCurrentHourNumberMore=dfJobsSummaryCurrentHour.loc[
-                           ( dfJobsSummaryCurrentHour[('jobId', 'count')] > batchJobsNumber2test )
+                        # questi controlli vanno se esiste almeno una riga
+                        dfJobsAlertCurrentHour=dfJobsSummaryCurrentHour.loc[
+                           ( dfJobsSummaryCurrentHour[('jobId', 'count')] < batchJobsNumber2test )
+                           |  ( dfJobsSummaryCurrentHour[('minuto', 'max')] > numberOfMinutesDelay4error) 
+                           |  ( dfJobsSummaryCurrentHour[('jobState', 'join')].str.contains('failed') ) 
                            ]
                         print('\n')
-                        print('Alert Numero Jobs partiti MAGGIORE del previsto ('+str(batchJobsNumber2test)+'): ')
-                        if dfJobsAlertCurrentHourNumberMore.empty:
-                           print ('OK')
+                        print('dfJobsAlertCurrentHour:')
+                        print(dfJobsAlertCurrentHour)
+                        if len(dfJobsAlertCurrentHour.index) == 0:
+                           stats.handleMeasure(sasapi.Measure(baseUrl,datetime.now(),'CHECK_JOBS_HOURLY',str(dt_utcnow.hour),'OK'))
+                           print ('PASS')
                         else:
-                           print(dfJobsAlertCurrentHourNumberMore)   
-                           stats.handleMeasure(sasapi.Measure(baseUrl,datetime.now(),'CHECK_JOBS_HOURLY',str(dfJobsAlertCurrentHourNumberMore[('jobId', 'count')].values[0]),'Jobs partiti MAGGIORE del previsto ('+str(batchJobsNumber2test)+')'))
-                        
-                        dfJobsAlertCurrentHourStartTime=dfJobsSummaryCurrentHour.loc[( dfJobsSummaryCurrentHour[('minuto', 'max')] > numberOfMinutesDelay4error) ]
-                        print('\n')
-                        print('Alert Numero Jobs partiti in ritardo (atteso delay massimo al minuto '+str(numberOfMinutesDelay4error)+'): ')
-                        if dfJobsAlertCurrentHourStartTime.empty:
-                           print ('OK')
-                        else:
-                           print(dfJobsAlertCurrentHourStartTime)
-                           stats.handleMeasure(sasapi.Measure(baseUrl,datetime.now(),'CHECK_JOBS_HOURLY',str(dfJobsAlertCurrentHourStartTime[('jobId', 'count')].values[0]),'Jobs partiti in ritardo (atteso delay massimo al minuto '+str(numberOfMinutesDelay4error)+')'))
+                           print ('FAIL')
+                           print ('\n')
+                           print ('Details:')
+                           
+                           dfJobsAlertCurrentHourNumberMore=dfJobsSummaryCurrentHour.loc[
+                              ( dfJobsSummaryCurrentHour[('jobId', 'count')] > batchJobsNumber2test )
+                              ]
+                           print('\n')
+                           print('Alert Numero Jobs partiti MAGGIORE del previsto ('+str(batchJobsNumber2test)+'): ')
+                           if dfJobsAlertCurrentHourNumberMore.empty:
+                              print ('OK')
+                           else:
+                              print(dfJobsAlertCurrentHourNumberMore)   
+                              stats.handleMeasure(sasapi.Measure(baseUrl,datetime.now(),'CHECK_JOBS_HOURLY',str(dfJobsAlertCurrentHourNumberMore[('jobId', 'count')].values[0]),'Jobs partiti MAGGIORE del previsto ('+str(batchJobsNumber2test)+')'))
+                           
+                           dfJobsAlertCurrentHourStartTime=dfJobsSummaryCurrentHour.loc[( dfJobsSummaryCurrentHour[('minuto', 'max')] > numberOfMinutesDelay4error) ]
+                           print('\n')
+                           print('Alert Numero Jobs partiti in ritardo (atteso delay massimo al minuto '+str(numberOfMinutesDelay4error)+'): ')
+                           if dfJobsAlertCurrentHourStartTime.empty:
+                              print ('OK')
+                           else:
+                              print(dfJobsAlertCurrentHourStartTime)
+                              stats.handleMeasure(sasapi.Measure(baseUrl,datetime.now(),'CHECK_JOBS_HOURLY',str(dfJobsAlertCurrentHourStartTime[('jobId', 'count')].values[0]),'Jobs partiti in ritardo (atteso delay massimo al minuto '+str(numberOfMinutesDelay4error)+')'))
 
-                        dfJobsAlertCurrentHourNumberLess=dfJobsSummaryCurrentHour.loc[( dfJobsSummaryCurrentHour[('jobId', 'count')] < batchJobsNumber2test ) ]
-                        print('\n')
-                        print('Alert Numero Jobs partiti MINORE del previsto ('+str(batchJobsNumber2test)+'): ')
-                        if dfJobsAlertCurrentHourNumberLess.empty:
-                           print ('OK')
-                        else:
-                           print(dfJobsAlertCurrentHourNumberLess)
-                           stats.handleMeasure(sasapi.Measure(baseUrl,datetime.now(),'CHECK_JOBS_HOURLY',str(  dfJobsAlertCurrentHourNumberLess[('jobId', 'count')].values[0]  ),'Jobs partiti MINORE del previsto ('+str(batchJobsNumber2test)+')'))
+                           dfJobsAlertCurrentHourNumberLess=dfJobsSummaryCurrentHour.loc[( dfJobsSummaryCurrentHour[('jobId', 'count')] < batchJobsNumber2test ) ]
+                           print('\n')
+                           print('Alert Numero Jobs partiti MINORE del previsto ('+str(batchJobsNumber2test)+'): ')
+                           if dfJobsAlertCurrentHourNumberLess.empty:
+                              print ('OK')
+                           else:
+                              print(dfJobsAlertCurrentHourNumberLess)
+                              stats.handleMeasure(sasapi.Measure(baseUrl,datetime.now(),'CHECK_JOBS_HOURLY',str(  dfJobsAlertCurrentHourNumberLess[('jobId', 'count')].values[0]  ),'Jobs partiti MINORE del previsto ('+str(batchJobsNumber2test)+')'))
 
-                        dfJobsAlertCurrentHourFailed=dfJobsSummaryCurrentHour.loc[ ( dfJobsSummaryCurrentHour[('jobState', 'join')].str.contains('failed') )  ]
-                        print('\n')
-                        print('Alert Jobs FALLITI: ')
-                        if dfJobsAlertCurrentHourFailed.empty:
-                           print ('OK')
-                        else:
-                           print(dfJobsAlertCurrentHourFailed)
-                           stats.handleMeasure(sasapi.Measure(baseUrl,datetime.now(),'CHECK_JOBS_HOURLY',str(dfJobsAlertCurrentHourFailed[('jobId', 'count')].values[0]),'Jobs FALLITI'))
+                           dfJobsAlertCurrentHourFailed=dfJobsSummaryCurrentHour.loc[ ( dfJobsSummaryCurrentHour[('jobState', 'join')].str.contains('failed') )  ]
+                           print('\n')
+                           print('Alert Jobs FALLITI: ')
+                           if dfJobsAlertCurrentHourFailed.empty:
+                              print ('OK')
+                           else:
+                              print(dfJobsAlertCurrentHourFailed)
+                              stats.handleMeasure(sasapi.Measure(baseUrl,datetime.now(),'CHECK_JOBS_HOURLY',str(dfJobsAlertCurrentHourFailed[('jobId', 'count')].values[0]),'Jobs FALLITI'))
 
 
 print('END ' + datetime.now().strftime("%m/%d/%Y, %H:%M:%S") + '----------------------------------------------------------------------------------------------')
