@@ -21,11 +21,13 @@ flt_env='COB'
 baseUrl = 'https://snamprodgerjob.ondemand.sas.com'
 flt_env='PRODSUP'
 
-baseUrl = 'https://snamtest.ondemand.sas.com'
-flt_env='TEST'
+
 
 baseUrl = 'https://snamprodmp.ondemand.sas.com'
 flt_env='PROD'
+
+baseUrl = 'https://snamtest.ondemand.sas.com'
+flt_env='TEST'
 
 tokenFile='.\\dat\\blob_storage_tokens.csv'
 
@@ -59,7 +61,7 @@ print(sessionPath)
 
 if (flt_inout == 'incoming') :
 
-    file2loadLocalName='hcFile.txt'
+    file2loadLocalName='hcFolder.tar'
     file2loadRemoteName='hcFile_2024_21_05.txt'
     apice='"'
     cmdCopyFile='azcopy copy ' + file2loadLocalName + ' ' + apice + containerUrl + '/' + file2loadRemoteName + '?' + token + apice

@@ -56,35 +56,31 @@ contentPathJobExRunPgm=restApi.jobexec_pgm_from_url
 
 
 
+
+
+
+numberOfMinutesDelay4error=0
+batchJobsNumber2test=2
+nHoursPastJobs=24*8
+baseUrl = 'https://snamprodgerjob.ondemand.sas.com'   
+
+
+
 batchJobsNumber2test=2
 nHoursPastJobs=24
 numberOfMinutesDelay4error=43
 baseUrl = 'https://snamprodukjob.ondemand.sas.com'
 
-
-
-numberOfMinutesDelay4error=0
-batchJobsNumber2test=4
-nHoursPastJobs=48
-baseUrl = 'https://snamprodmp.ondemand.sas.com'
-
 numberOfMinutesDelay4error=0
 batchJobsNumber2test=2
-nHoursPastJobs=72
-baseUrl = 'https://snamprodgerjob.ondemand.sas.com'   
+nHoursPastJobs=24*30
+baseUrl = 'https://snamprodmp.ondemand.sas.com'
 
-# test è stato restartato il 4 giugno 
 # oltre ai non partiti, vedere i failed, da cui si vedono le http error, di cui pare esserci tuning
 batchJobsNumber2test=1
 numberOfMinutesDelay4error=3
 nHoursPastJobs=200
 baseUrl = 'https://snamtest.ondemand.sas.com'
-
-
-
-
-
-
 
 # -----------------------------------------------------------------------------------------------------------------
 
@@ -105,7 +101,7 @@ out={"token": token,
      }
 '''
         
-maxIter=2
+maxIter=4
 iter=1
 endWhile=False
 
@@ -294,7 +290,8 @@ else:
        #| 
        (  jobsubmittedByApplication == 'jobExecution' ) 
        & ( jobName.find('jmon') == -1 )
-       #& ( jobName.find('jmon') >= 0 )
+       & ( jobName.find('JD') >= 0 )
+       #& ( jobName.find('JR') >= 0 )
        # passo tutto
        #| (True )
        ):
