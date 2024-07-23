@@ -59,28 +59,41 @@ contentPathJobExRunPgm=restApi.jobexec_pgm_from_url
 
 
 
-numberOfMinutesDelay4error=0
-batchJobsNumber2test=2
-nHoursPastJobs=24*8
-baseUrl = 'https://snamprodgerjob.ondemand.sas.com'   
 
 
-
-batchJobsNumber2test=2
-nHoursPastJobs=24
-numberOfMinutesDelay4error=43
-baseUrl = 'https://snamprodukjob.ondemand.sas.com'
-
-numberOfMinutesDelay4error=0
-batchJobsNumber2test=2
-nHoursPastJobs=24*30
-baseUrl = 'https://snamprodmp.ondemand.sas.com'
 
 # oltre ai non partiti, vedere i failed, da cui si vedono le http error, di cui pare esserci tuning
 batchJobsNumber2test=1
 numberOfMinutesDelay4error=3
 nHoursPastJobs=200
 baseUrl = 'https://snamtest.ondemand.sas.com'
+
+batchJobsNumber2test=2
+nHoursPastJobs=24*3
+numberOfMinutesDelay4error=43
+baseUrl = 'https://snamprodukjob.ondemand.sas.com'
+
+
+
+
+
+
+
+
+
+
+
+
+numberOfMinutesDelay4error=0
+batchJobsNumber2test=2
+nHoursPastJobs=24*3
+baseUrl = 'https://snamprodgerjob.ondemand.sas.com'   
+
+
+numberOfMinutesDelay4error=15
+batchJobsNumber2test=1
+nHoursPastJobs=24*4
+baseUrl = 'https://snamprodmp.ondemand.sas.com'
 
 # -----------------------------------------------------------------------------------------------------------------
 
@@ -242,6 +255,13 @@ while ( ( iter <= maxIter ) & ( endWhile == False ) ):
    else:
       endWhile=True
 
+
+startGiorno=''
+startOraZ=''
+endGiorno=''
+endOraZ=''
+flgFirstRow=True
+
 if ( len(items) == 0 ):
    print('ELENCO JOBS RESTITUITO HA ZERO ELEMENTI')
 else:
@@ -281,6 +301,13 @@ else:
     giorno =jobcreationTimeStamp[0:10];
     oraZ   =jobcreationTimeStamp[11:13];
     minuto =int(jobcreationTimeStamp[14:16]);
+
+    if (flgFirstRow):
+       startGiorno=giorno
+       startOraZ=oraZ
+       flgFirstRow=False
+    endGiorno=giorno
+    endOraZ=oraZ
     
     #print(jobsubmittedByApplication)
     if (
@@ -289,9 +316,10 @@ else:
        # job schedulati
        #| 
        (  jobsubmittedByApplication == 'jobExecution' ) 
-       & ( jobName.find('jmon') == -1 )
-       & ( jobName.find('JD') >= 0 )
-       #& ( jobName.find('JR') >= 0 )
+       # & ( jobName.find('jmon') == -1 )
+       # dafne
+       & ( jobName.find('g1_prevedi_viya_job') >= 0 )
+       #| ( jobName.find('JD') >= 0 )
        # passo tutto
        #| (True )
        ):
@@ -338,11 +366,22 @@ else:
       print('dfJobsSummary')
       print(dfJobsSummary)
 
-      """
-      for col in dfJobsSummary.columns:
-       print(col)
-      """
+      print('\n CHECK ORE SENZA JOB PARTITI: \n')
+      print('********************************************************************')
 
+      print('start giorno:' + startGiorno + ', endOraZ:' + endOraZ)
+      print('end giorno:' + endGiorno + ', endOraZ: ' + endOraZ)
+
+      range=pandas.period_range(start=startGiorno+'T'+startOraZ, end=endGiorno+'T'+endOraZ, freq='h')
+      #print(range)
+
+      for h in range:
+         testGiorno=h.strftime('%Y-%m-%d')
+         testOraZ=h.strftime('%H').zfill(2)
+         #print('testing ',testGiorno, testOraZ)
+         dfTestOra=dfJobsSummary.loc[ ( dfJobsSummary[('giorno')] == testGiorno ) & ( dfJobsSummary[('oraZ')] == testOraZ ) ]
+         if len(dfTestOra.index) == 0:
+            print ('GIORNO - ORA Z MISSING: ', testGiorno, testOraZ)     
 
 
       dfJobsAlert=dfJobsSummary.loc[
@@ -350,7 +389,7 @@ else:
          |  ( dfJobsSummary[('minuto', 'max')] > numberOfMinutesDelay4error) 
          |  ( dfJobsSummary[('jobState', 'join')].str.contains('failed') ) 
          ]
-      print('\n')
+      print('\n CHECK COINTEGGI JOB ORARI, DELAY, ERRORI:')
       print('********************************************************************')
       #print(dfJobsAlert)
       if len(dfJobsAlert.index) == 0:
@@ -405,6 +444,7 @@ else:
             print ('OK')
          else:
            print(dfJobsAlertFailed)
+
 
 
 
