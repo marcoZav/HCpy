@@ -61,25 +61,17 @@ contentPathJobExRunPgm=restApi.jobexec_pgm_from_url
 
 
 
-
 # oltre ai non partiti, vedere i failed, da cui si vedono le http error, di cui pare esserci tuning
 batchJobsNumber2test=1
 numberOfMinutesDelay4error=3
 nHoursPastJobs=200
 baseUrl = 'https://snamtest.ondemand.sas.com'
 
+
 batchJobsNumber2test=2
 nHoursPastJobs=24*3
 numberOfMinutesDelay4error=43
 baseUrl = 'https://snamprodukjob.ondemand.sas.com'
-
-
-
-
-
-
-
-
 
 
 
@@ -92,8 +84,10 @@ baseUrl = 'https://snamprodgerjob.ondemand.sas.com'
 
 numberOfMinutesDelay4error=15
 batchJobsNumber2test=1
-nHoursPastJobs=24*4
+nHoursPastJobs=24*8
 baseUrl = 'https://snamprodmp.ondemand.sas.com'
+
+
 
 # -----------------------------------------------------------------------------------------------------------------
 
@@ -190,6 +184,12 @@ print(items)
 print('\n')
 print('-- Get sas.logon.jwt Conf:')
 items=restApi.getConfigurationDefinition(baseUrl,token,'sas.logon.jwt')
+#items=getIdentitiesConf(baseUrl,token)
+print(items)
+
+print('\n')
+print('-- Get oauth2.client Conf:')
+items=restApi.getConfigurationDefinition(baseUrl,token,'oauth2.client')
 #items=getIdentitiesConf(baseUrl,token)
 print(items)
 
